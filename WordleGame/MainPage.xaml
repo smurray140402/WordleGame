@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WordleGame.MainPage">
+             x:Class="WordleGame.MainPage"
+             Title="Wordle">
 
     <VerticalStackLayout HorizontalOptions="Center" Padding="10">
+        
         <!-- Title -->
         <Label Text="Wordle Game" HorizontalOptions="Center" FontAttributes="Bold"  FontSize="30" Margin="0, 20"/>
 
@@ -11,6 +13,16 @@
         <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5">
             <!-- Content added here dynamically -->
         </Grid>
+
+        <!-- Input -->
+        <HorizontalStackLayout Margin="0,20">
+            <Entry x:Name="UserInput" Placeholder="Guess the word!" WidthRequest="200" MaxLength="5" Keyboard="Text"/>
+            <Button x:Name="GuessBtn" Text="Guess!" Clicked="OnGuessBtnClicked"/>
+        </HorizontalStackLayout>
+
+        <!-- Label for feedback -->
+        <Label x:Name="FeedbackLabel" FontSize="16" TextColor="Red" HorizontalOptions="Center" Margin="0,10"/>
+        
     </VerticalStackLayout>
     
 </ContentPage>
