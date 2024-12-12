@@ -1,20 +1,39 @@
-﻿namespace WordleGame
+﻿using System;
+using Microsoft.Maui.Controls;
+using System.Diagnostics;
+
+namespace WordleGame
 {
     public partial class MainPage : ContentPage
     {
+        // ViewModel
+        WordViewModel wordModel;
+
         // Constants
         private const int MaxAttempts = 6;
         private const int WordLength = 5;
 
         // Variables
-        private string targetWord = "STEAK"; 
+        private string targetWord; 
         private int currentAttempt = 0;
 
 
         public MainPage()
         {
             InitializeComponent();
+            wordModel = new WordViewModel();
+
+            SetupGame();
             SetupGrid();
+        }
+
+        // Just gets random word for now
+        // Might include some error handling here too
+        private async void SetupGame()
+        {
+            await wordModel.LoadWords();
+            targetWord = wordModel.GetRandomWord().ToUpper();
+            Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n");
         }
 
         private void SetupGrid()
@@ -42,7 +61,7 @@
                     WordGrid.Children.Add(cellLabel);
                 }
             }
-        } // setup grid
+        } // SetupGrid
 
         // Creates a styled label for a cell in the Wordle grid
         private Label CreateCellLabel()
@@ -58,8 +77,9 @@
                 HeightRequest = 40,
                 Margin = 2
             };
-        }
+        } // CreateCellLabel
 
+        // When guess is clicked or when enter key is entered
         private void OnGuessBtnClicked(object sender, EventArgs e)
         {
             string guess = UserInput.Text?.ToUpper();
@@ -80,14 +100,15 @@
             GuessCheck(guess);
 
             UserInput.Text = "";
-        } // OnSubmitClicked
-
+        } // OnGuessBtnClicked
 
         private void GuessCheck(string guess)
         {
             // Check the users guess against target word and update the grid
             // TODO: Need to fix yellow appearing if letter is already accounted for
             // IDEA: Counter for how many times each letter appears?
+            // IDEA: Other possible soltion could be instead of the else if checking if the full
+            // word contains the letter just check if the remaining letters (not green) contain it.
             for (int col = 0; col < WordLength; col++)
             {
                 var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
@@ -117,6 +138,27 @@
 
             currentAttempt++;
         } // GuessCheck
+
+        // If entry box text changes
+        private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Gets any new text by user
+            // TODO: Register deleted characters and update UI
+            string typedText = e.NewTextValue?.ToUpper();
+
+            // Limit the length to 5
+            if (typedText?.Length > WordLength)
+            {
+                typedText = typedText.Substring(0, WordLength);
+            }
+
+            // Update the cells based on the input text
+            for (int i = 0; i < typedText.Length; i++)
+            {
+                var label = (Label)WordGrid.Children[currentAttempt * WordLength + i];
+                label.Text = typedText[i].ToString();
+            }
+        }
 
         private void EndGame()
         {

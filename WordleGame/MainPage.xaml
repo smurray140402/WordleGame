@@ -16,7 +16,7 @@
 
         <!-- Input -->
         <HorizontalStackLayout Margin="0,20">
-            <Entry x:Name="UserInput" Placeholder="Guess the word!" WidthRequest="200" MaxLength="5" Keyboard="Text"/>
+            <Entry x:Name="UserInput" Placeholder="Guess the word!" WidthRequest="200" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged"/>
             <Button x:Name="GuessBtn" Text="Guess!" Clicked="OnGuessBtnClicked"/>
         </HorizontalStackLayout>
 
