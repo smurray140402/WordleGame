@@ -82,6 +82,8 @@ namespace WordleGame
         // When guess is clicked or when enter key is entered
         private void OnGuessBtnClicked(object sender, EventArgs e)
         {
+            if (CheckGameOver()) return;
+
             string guess = UserInput.Text?.ToUpper();
 
             if (string.IsNullOrWhiteSpace(guess) || guess.Length != WordLength)
@@ -90,16 +92,9 @@ namespace WordleGame
                 return;
             }
 
-            if (currentAttempt >= MaxAttempts)
-            {
-                FeedbackLabel.Text = $"Game over! The word was {targetWord}.";
-                EndGame();
-                return;
-            }
-
             GuessCheck(guess);
-
             UserInput.Text = "";
+
         } // OnGuessBtnClicked
 
         private void GuessCheck(string guess)
@@ -142,13 +137,7 @@ namespace WordleGame
         // If entry box text changes
         private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
         {
-            // Check if the game is over
-            if (currentAttempt >= MaxAttempts)
-            {
-                FeedbackLabel.Text = $"Game over! The word was {targetWord}.";
-                EndGame();
-                return;
-            }
+            if (CheckGameOver()) return;
 
             // Gets any new text by user
             // TODO: Register deleted characters and update UI
@@ -168,16 +157,28 @@ namespace WordleGame
             }
         }
 
+        private async void OnSettingsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsPage());
+        }
+
+        private bool CheckGameOver()
+        {
+            if (currentAttempt >= MaxAttempts)
+            {
+                FeedbackLabel.Text = $"Game over! The word was {targetWord}.";
+                EndGame();
+                return true;
+            }
+            return false;
+        }
+
         private void EndGame()
         {
             UserInput.IsVisible = false;
             GuessBtn.IsVisible = false;
         }
 
-        private async void OnSettingsClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingsPage());
-        }
-    }
+    } // class
 
-}
+} // namespace
