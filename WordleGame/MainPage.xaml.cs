@@ -27,13 +27,20 @@ namespace WordleGame
             SetupGrid();
         }
 
-        // Just gets random word for now
-        // Might include some error handling here too
+        // Gets random word from WordViewModel
         private async void SetupGame()
         {
-            await wordModel.LoadWords();
-            targetWord = wordModel.GetRandomWord().ToUpper();
-            Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n");
+            try
+            {
+                await wordModel.LoadWords();
+                targetWord = wordModel.GetRandomWord().ToUpper();
+                Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n"); // This is just so I can check what target word is for testing
+            }
+            catch (Exception ex)
+            {
+                FeedbackLabel.Text = $"Error loading word list: {ex.Message}";
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
         }
 
         private void SetupGrid()
