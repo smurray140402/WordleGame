@@ -142,6 +142,14 @@ namespace WordleGame
         // If entry box text changes
         private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
         {
+            // Check if the game is over
+            if (currentAttempt >= MaxAttempts)
+            {
+                FeedbackLabel.Text = $"Game over! The word was {targetWord}.";
+                EndGame();
+                return;
+            }
+
             // Gets any new text by user
             // TODO: Register deleted characters and update UI
             string typedText = e.NewTextValue?.ToUpper();
@@ -166,6 +174,10 @@ namespace WordleGame
             GuessBtn.IsVisible = false;
         }
 
+        private async void OnSettingsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsPage());
+        }
     }
 
 }
