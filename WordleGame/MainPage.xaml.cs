@@ -6,12 +6,16 @@ namespace WordleGame
 {
     public partial class MainPage : ContentPage
     {
-        // ViewModel
+        // ViewModels
         WordViewModel wordModel;
+        GameSaveDataViewModel gameSaveDataViewModel;
 
         // Constants
         private const int MaxAttempts = 6;
         private const int WordLength = 5;
+
+        // Hardcoded for now. Will add login/signup functionality later
+        private string userName = "jeff";
 
         // Variables
         private string targetWord; 
@@ -21,7 +25,9 @@ namespace WordleGame
         public MainPage()
         {
             InitializeComponent();
+
             wordModel = new WordViewModel();
+            gameSaveDataViewModel = new GameSaveDataViewModel();
 
             SetupGame();
             SetupGrid();
@@ -134,6 +140,14 @@ namespace WordleGame
             {
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
                 FeedbackLabel.TextColor = Colors.Green;
+
+
+                // Save Progress
+                // TODO: At the minute it only saves progress for successful tries. Need to add it for unsuccessful tries/
+                //       Also need to implement a way that if I leave halfway through a go and come back it is saved to be resumed.
+
+                gameSaveDataViewModel.AddProgress(userName, targetWord, currentAttempt + 1);
+
                 EndGame();
                 return;
             }
@@ -168,6 +182,16 @@ namespace WordleGame
         {
             await Navigation.PushAsync(new SettingsPage());
         }
+
+        private async void OnViewStatisticsClicked(object sender, EventArgs e)
+        {
+            var progressList = gameSaveDataViewModel.GetSaveDataByUser(userName);
+
+            // Add error handling here
+            await Navigation.PushAsync(new StatisticsPage(userName));
+
+        }
+
 
         private bool CheckGameOver()
         {

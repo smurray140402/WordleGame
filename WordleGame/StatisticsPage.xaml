@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WordleGame.StatisticsPage"
+             Title="StatisticsPage">
+
+    <VerticalStackLayout Padding="10">
+        <Label Text="Your Game Statistics" FontSize="24" HorizontalOptions="Center" Margin="0, 20"/>
+        <Label x:Name="StatisticsFeedbackLabel" Text="" FontSize="18" HorizontalOptions="Center" Margin="0, 20"/>
+
+        <!-- ListView that displays previous words, attempts and dates. Only successful tries for now. -->
+        <ListView x:Name="StatisticsListView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding Word, StringFormat='Word: {0}'}" FontSize="18"/>
+                            <Label Text="{Binding Attempts, StringFormat='Attempts: {0}'}" FontSize="16"/>
+                            <Label Text="{Binding Date, StringFormat='Date: {0}'}" FontSize="14" TextColor="Gray"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
+    
+</ContentPage>

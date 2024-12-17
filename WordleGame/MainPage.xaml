@@ -9,19 +9,26 @@
         <!-- Title -->
         <Label Text="Wordle Game" HorizontalOptions="Center" FontAttributes="Bold"  FontSize="30" Margin="0, 20"/>
 
-        <!-- Settings button -->
+        <!-- Settings and View Stats -->
         <!-- How to play and Scores page might be added here in time -->
-        <StackLayout x:Name="NavigationButtons"
-              Orientation="Horizontal" 
-              HorizontalOptions="Center" 
-              Spacing="15">
+        <StackLayout  x:Name="NavigationButtons"
+                      Orientation="Horizontal" 
+                      HorizontalOptions="Center" 
+                      Spacing="15">
 
-            <Button Text="Settings" 
-             Clicked="OnSettingsClicked" 
-             BackgroundColor="MediumSeaGreen" 
-             TextColor="White" 
-             FontSize="14" 
-             CornerRadius="10"/>
+            <Button  Text="Settings" 
+                     Clicked="OnSettingsClicked" 
+                     BackgroundColor="MediumSeaGreen" 
+                     TextColor="White" 
+                     FontSize="14" 
+                     CornerRadius="10"/>
+
+            <Button  Text="View Stats" 
+                     Clicked="OnViewStatisticsClicked"
+                     BackgroundColor="MediumSeaGreen" 
+                     TextColor="White" 
+                     FontSize="14" 
+                     CornerRadius="10"/>
 
         </StackLayout>
 
