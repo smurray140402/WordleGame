@@ -39,8 +39,8 @@
 
         <!-- Input -->
         <HorizontalStackLayout Margin="0,20">
-            <Entry x:Name="UserInput" Placeholder="Guess the word!" WidthRequest="200" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
-            <Button x:Name="GuessBtn" Text="Guess!" Clicked="OnGuessBtnClicked"/>
+            <Entry x:Name="UserInput" Placeholder="Guess the word!" Opacity="0" WidthRequest="200" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
+            <Button x:Name="GuessBtn" Opacity="0" Text="Guess!" Clicked="OnGuessBtnClicked"/>
         </HorizontalStackLayout>
 
         <!-- Label for feedback -->

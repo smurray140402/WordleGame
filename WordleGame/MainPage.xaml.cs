@@ -107,6 +107,7 @@ namespace WordleGame
                 return;
             }
 
+            FeedbackLabel.Text = "";
             GuessCheck(guess);
             UserInput.Text = "";
 
@@ -175,12 +176,6 @@ namespace WordleGame
                 typedText = new string(typedText.Where(c => char.IsLetter(c)).ToArray());
             }
 
-            // Limit the length to 5
-            if (typedText?.Length > WordLength)
-            {
-                typedText = typedText.Substring(0, WordLength);
-            }
-
             // Update the cells based on the input text
             for (int i = 0; i < WordLength; i++)
             {
@@ -218,7 +213,7 @@ namespace WordleGame
         {
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                await Task.Delay(500);
+                await Task.Delay(100);
                 UserInput.Focus();
             });
         }
