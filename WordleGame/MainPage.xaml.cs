@@ -2,6 +2,7 @@
 using Microsoft.Maui.Controls;
 using System.Diagnostics;
 
+
 namespace WordleGame
 {
     public partial class MainPage : ContentPage
@@ -31,6 +32,7 @@ namespace WordleGame
 
             SetupGame();
             SetupGrid();
+
         }
 
         // Gets random word from WordViewModel
@@ -157,13 +159,14 @@ namespace WordleGame
             currentAttempt++;
         } // GuessCheck
 
+        
+
         // If entry box text changes
         private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
         {
             if (CheckGameOver()) return;
 
             // Gets any new text by user
-            // TODO: Register deleted characters and update UI
             string typedText = e.NewTextValue?.ToUpper();
 
             // Only allow letters
@@ -196,6 +199,28 @@ namespace WordleGame
             }
 
             UserInput.Text = typedText;
+        }
+
+        // When page appears Focus on the entry box
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Task.Delay(1000);
+                UserInput.Focus();
+            });
+        }
+
+        // Refocus the Entry box if it loses focus
+        private void UserInput_Unfocused(object sender, FocusEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Task.Delay(500);
+                UserInput.Focus();
+            });
         }
 
         private async void OnSettingsClicked(object sender, EventArgs e)
