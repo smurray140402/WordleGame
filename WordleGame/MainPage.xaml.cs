@@ -148,6 +148,8 @@ namespace WordleGame
 
                 gameSaveDataViewModel.AddProgress(userName, targetWord, currentAttempt + 1);
 
+                // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
+                currentAttempt = 6;
                 EndGame();
                 return;
             }
@@ -164,6 +166,12 @@ namespace WordleGame
             // TODO: Register deleted characters and update UI
             string typedText = e.NewTextValue?.ToUpper();
 
+            // Only allow letters
+            if (!string.IsNullOrEmpty(typedText))
+            {
+                typedText = new string(typedText.Where(c => char.IsLetter(c)).ToArray());
+            }
+
             // Limit the length to 5
             if (typedText?.Length > WordLength)
             {
@@ -171,11 +179,23 @@ namespace WordleGame
             }
 
             // Update the cells based on the input text
-            for (int i = 0; i < typedText.Length; i++)
+            for (int i = 0; i < WordLength; i++)
             {
                 var label = (Label)WordGrid.Children[currentAttempt * WordLength + i];
-                label.Text = typedText[i].ToString();
+
+
+                // Set the label text if we have new text for that index, or clear it if we're deleting
+                if (i < typedText.Length)
+                {
+                    label.Text = typedText[i].ToString();
+                }
+                else
+                {
+                    label.Text = ""; // Clear the label if there's no new character
+                }               
             }
+
+            UserInput.Text = typedText;
         }
 
         private async void OnSettingsClicked(object sender, EventArgs e)
