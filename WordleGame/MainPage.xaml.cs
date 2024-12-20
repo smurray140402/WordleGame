@@ -35,7 +35,7 @@ namespace WordleGame
 
         }
 
-        // Gets random word from WordViewModel
+        // Loads word list and valid guesses list
         private async void SetupGame()
         {
             try
@@ -47,6 +47,15 @@ namespace WordleGame
             catch (Exception ex)
             {
                 FeedbackLabel.Text = $"Error loading word list: {ex.Message}";
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+            try
+            {
+                await wordModel.LoadValidGuesses();
+            }
+            catch (Exception ex)
+            {
+                FeedbackLabel.Text = $"Error loading valid guesses list: {ex.Message}";
                 Debug.WriteLine($"Error: {ex.Message}");
             }
         }
@@ -107,11 +116,8 @@ namespace WordleGame
                 return;
             }
 
-            // Validate guessed word with word list to only let them guess if its a valid word
-            // Since words in word list are lower case I need to input guess as lower case
-            // The list of words is 3103 words. These are possible answers but the actual valid word list should be much larger. Even though
-            // these words will never be the targetWord they should still be valid guess words. e.g 'TIMER'
-            if (!wordModel.WordList.Contains(guess.ToLower()))
+            // Validate guessed word with valid guesses list to only let them guess if its a valid word
+            if (!wordModel.ValidGuesses.Contains(guess.ToLower()))
             {
                 FeedbackLabel.Text = "Your guess is not a valid word please try again.";
                 return;
@@ -205,7 +211,7 @@ namespace WordleGame
             }
 
             // Automatically checks validation of word 
-            if (typedText.Length == WordLength && !wordModel.WordList.Contains(typedText.ToLower()))
+            if (typedText.Length == WordLength && !wordModel.ValidGuesses.Contains(typedText.ToLower()))
             {
                 FeedbackLabel.Text = "Your guess is not a valid word please try again.";
                 return;
