@@ -107,6 +107,16 @@ namespace WordleGame
                 return;
             }
 
+            // Validate guessed word with word list to only let them guess if its a valid word
+            // Since words in word list are lower case I need to input guess as lower case
+            // The list of words is 3103 words. These are possible answers but the actual valid word list should be much larger. Even though
+            // these words will never be the targetWord they should still be valid guess words. e.g 'TIMER'
+            if (!wordModel.WordList.Contains(guess.ToLower()))
+            {
+                FeedbackLabel.Text = "Your guess is not a valid word please try again.";
+                return;
+            }
+
             FeedbackLabel.Text = "";
             GuessCheck(guess);
             UserInput.Text = "";
@@ -166,6 +176,7 @@ namespace WordleGame
         private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
         {
             if (CheckGameOver()) return;
+            FeedbackLabel.Text = "";
 
             // Gets any new text by user
             string typedText = e.NewTextValue?.ToUpper();
@@ -191,6 +202,13 @@ namespace WordleGame
                 {
                     label.Text = ""; // Clear the label if there's no new character
                 }               
+            }
+
+            // Automatically checks validation of word 
+            if (typedText.Length == WordLength && !wordModel.WordList.Contains(typedText.ToLower()))
+            {
+                FeedbackLabel.Text = "Your guess is not a valid word please try again.";
+                return;
             }
 
             UserInput.Text = typedText;
