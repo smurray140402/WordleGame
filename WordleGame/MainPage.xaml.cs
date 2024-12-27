@@ -200,9 +200,8 @@ namespace WordleGame
                 gameSaveDataViewModel.AddProgress(userName, targetWord, currentAttempt + 1);
 
                 // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
-                currentAttempt = 6;
+                currentAttempt = MaxAttempts;
                 EndGame();
-                return;
             }
 
             currentAttempt++;
@@ -291,6 +290,11 @@ namespace WordleGame
 
         private bool CheckGameOver()
         {
+            if (currentAttempt == MaxAttempts + 1)
+            {
+                return true;
+            }
+
             if (currentAttempt >= MaxAttempts)
             {
                 FeedbackLabel.Text = $"Game over! The word was {targetWord}.";
