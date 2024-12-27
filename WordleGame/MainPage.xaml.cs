@@ -2,7 +2,6 @@
 using Microsoft.Maui.Controls;
 using System.Diagnostics;
 
-
 namespace WordleGame
 {
     public partial class MainPage : ContentPage
@@ -108,7 +107,7 @@ namespace WordleGame
         {
             if (CheckGameOver()) return;
 
-            string guess = UserInput.Text?.ToUpper();
+            string? guess = UserInput.Text?.ToUpper();
 
             if (string.IsNullOrWhiteSpace(guess) || guess.Length != WordLength)
             {
@@ -129,37 +128,70 @@ namespace WordleGame
 
         } // OnGuessBtnClicked
 
+
+
+        // Check the users guess against target word and update the grid
         private void GuessCheck(string guess)
         {
-            // Check the users guess against target word and update the grid
-            // TODO: Need to fix yellow appearing if letter is already accounted for
-            // IDEA: Counter for how many times each letter appears?
-            // IDEA: Other possible soltion could be instead of the else if checking if the full
-            // word contains the letter just check if the remaining letters (not green) contain it.
+            // Dictionary to store the count of each letter in the target word
+            var letterCount = new Dictionary<char, int>();
+
+            // Counter for letters in the targetWord
+            foreach (var letter in targetWord)
+            {
+                if (letterCount.ContainsKey(letter))
+                {
+                    letterCount[letter]++;
+                }
+                else
+                {
+                    letterCount[letter] = 1;
+                }
+            }
+
+            // Loop that checks for letters in the correct position
             for (int col = 0; col < WordLength; col++)
             {
                 var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
                 label.Text = guess[col].ToString();
 
+                // Decrements the letterCount so a letter will only change to yellow if there is atleast one remaining letter after the greens are accounted for
+                if (guess[col] == targetWord[col])
+                {
+                    letterCount[guess[col]]--;
+                }
+            }
+
+            // Loop that changes the labels background colours according to the letters
+            for (int col = 0; col < WordLength; col++)
+            {
+                var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
+
+                // Correct position
                 if (guess[col] == targetWord[col])
                 {
                     label.BackgroundColor = Colors.Green;
+                    continue;
                 }
-                else if (targetWord.Contains(guess[col]))
+
+                // Letter in word but not that position
+                if (letterCount.ContainsKey(guess[col]) && letterCount[guess[col]] > 0)
                 {
                     label.BackgroundColor = Colors.Yellow;
+                    letterCount[guess[col]]--;
                 }
+
+                // Letter not in word
                 else
                 {
                     label.BackgroundColor = Colors.Gray;
                 }
-            } // for col
+            }
 
             if (guess == targetWord)
             {
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
                 FeedbackLabel.TextColor = Colors.Green;
-
 
                 // Save Progress
                 // TODO: At the minute it only saves progress for successful tries. Need to add it for unsuccessful tries/
@@ -185,7 +217,7 @@ namespace WordleGame
             FeedbackLabel.Text = "";
 
             // Gets any new text by user
-            string typedText = e.NewTextValue?.ToUpper();
+            string? typedText = e.NewTextValue?.ToUpper();
 
             // Only allow letters
             if (!string.IsNullOrEmpty(typedText))
