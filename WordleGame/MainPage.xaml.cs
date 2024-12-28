@@ -14,10 +14,12 @@ namespace WordleGame
         private const int MaxAttempts = 6;
         private const int WordLength = 5;
 
-        // Hardcoded for now. Will add login/signup functionality later
-        private string userName = "jeff";
+        // Game States
+        private bool hasPrompted = false;
 
         // Variables
+        private string userName;
+        private string fullName;
         private string targetWord; 
         private int currentAttempt = 0;
 
@@ -29,8 +31,63 @@ namespace WordleGame
             wordModel = new WordViewModel();
             gameSaveDataViewModel = new GameSaveDataViewModel();
 
+        }
+
+        // When page appears focus on the entry box and call on PromptUsername()
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            await Task.Delay(1000);
+            await PromptUsername();
             SetupGame();
             SetupGrid();
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Task.Delay(1000);
+                UserInput.Focus();
+            });
+        }
+
+        // Prompts the user to enter their username when the app starts
+        private async Task PromptUsername()
+        {
+            // If username has already been asked for don't ask again
+            if (hasPrompted) return;
+
+            hasPrompted = true;
+
+            while (string.IsNullOrWhiteSpace(userName))
+            {
+                userName = await DisplayPromptAsync("Welcome!", "Enter your username:");
+
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    await DisplayAlert("Error", "Username cannot be empty. Please enter a valid username.", "OK");
+                }
+            }
+
+            // Check if user already exists
+            var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
+
+            if (userProgress.Count == 0)
+            {
+                // New user
+                fullName = await DisplayPromptAsync("New User", "Enter your full name:");
+                if (string.IsNullOrWhiteSpace(fullName))
+                {
+                    fullName = "Player"; // Default name if no input
+                }
+
+                await DisplayAlert("Welcome!", $"Hi {fullName}, your account has been created!", "OK");
+            }
+            else
+            {
+                // Existing user
+                fullName = userProgress.First().Name;
+                await DisplayAlert("Welcome Back!", $"Hi {fullName}, resuming your game!", "OK");
+            }
 
         }
 
@@ -197,7 +254,7 @@ namespace WordleGame
                 // TODO: At the minute it only saves progress for successful tries. Need to add it for unsuccessful tries/
                 //       Also need to implement a way that if I leave halfway through a go and come back it is saved to be resumed.
 
-                gameSaveDataViewModel.AddProgress(userName, targetWord, currentAttempt + 1);
+                gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1);
 
                 // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
                 currentAttempt = MaxAttempts;
@@ -249,18 +306,6 @@ namespace WordleGame
             }
 
             UserInput.Text = typedText;
-        }
-
-        // When page appears Focus on the entry box
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await Task.Delay(1000);
-                UserInput.Focus();
-            });
         }
 
         // Refocus the Entry box if it loses focus

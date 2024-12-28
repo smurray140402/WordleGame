@@ -36,17 +36,19 @@ public class GameSaveDataViewModel
 		File.WriteAllText(SaveFilePath, jsonString);
 	}
 
-	public void AddProgress(string username, string word, int attempts)
+	public void AddProgress(string username, string name, string word, int attempts)
 	{
 		var newProgress = new GameSaveData
 		{
 			Username = username,
+			Name = name,
 			Word = word,
 			Attempts = attempts,
 			Timestamp = DateTime.Now
 		};
 
 		SavedDataList.Add(newProgress);
+
 		SaveData();
 	}
 
