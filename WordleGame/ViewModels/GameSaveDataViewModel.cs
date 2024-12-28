@@ -29,7 +29,7 @@ public class GameSaveDataViewModel
 		}
 	} // load data
 
-	private void SaveData(string username)
+	public void SaveData(string username)
 	{
         string SaveFilePath = Path.Combine(SaveDirectory, $"{username}_save_data.json");
 

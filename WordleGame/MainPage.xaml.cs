@@ -42,9 +42,9 @@ namespace WordleGame
 
             await Task.Delay(1000);
             await PromptUsername();
-            SetupGame();
             SetupGrid();
-
+            SetupGame();
+           
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 await Task.Delay(1000);
@@ -101,8 +101,27 @@ namespace WordleGame
             try
             {
                 await wordModel.LoadWords();
-                targetWord = wordModel.GetRandomWord().ToUpper();
-                Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n"); // This is just so I can check what target word is for testing
+
+                // Retrieve saved progress for the user
+                var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
+                var latestProgress = userProgress?.OrderByDescending(p => p.Timestamp).FirstOrDefault();
+
+                // Resume Progress
+                if (latestProgress != null && latestProgress.Attempts < MaxAttempts && latestProgress.Guesses.Last() != latestProgress.Word)
+                {
+                    targetWord = latestProgress.Word;
+                    currentAttempt = latestProgress.Attempts;
+                    PopulateGridWithSavedGuesses(latestProgress.Guesses);
+                    FeedbackLabel.Text = $"{MaxAttempts - currentAttempt} attempts left!";
+                }
+                // For starting a new game
+                else
+                {
+                    targetWord = wordModel.GetRandomWord().ToUpper();
+                    FeedbackLabel.Text = $"You have {MaxAttempts} attempts to guess the word!";
+
+                    Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n"); // This is just so I can check what target word is for testing
+                }
             }
             catch (Exception ex)
             {
@@ -151,6 +170,38 @@ namespace WordleGame
             }
             hasSetupGrid = true;
         } // SetupGrid
+
+
+        private void PopulateGridWithSavedGuesses(List<string> guesses)
+        {
+            foreach (var guess in guesses.Select((value, index) => new { value, index }))
+            {
+                var guessText = guess.value;
+                var rowIndex = guess.index;
+
+                // Populate each letter in the row
+                for (int col = 0; col < WordLength; col++)
+                {
+                    var label = (Label)WordGrid.Children[rowIndex * WordLength + col];
+                    label.Text = guessText[col].ToString();
+
+                    // Determine background color for the letter
+                    if (guessText[col] == targetWord[col])
+                    {
+                        label.BackgroundColor = Colors.Green;
+                    }
+                    else if (targetWord.Contains(guessText[col]))
+                    {
+                        label.BackgroundColor = Colors.Yellow;
+                    }
+                    else
+                    {
+                        label.BackgroundColor = Colors.Gray;
+                    }
+                }
+            }
+        }
+
 
         // Creates a styled label for a cell in the Wordle grid
         private Label CreateCellLabel()
@@ -357,6 +408,8 @@ namespace WordleGame
         {
             UserInput.IsVisible = false;
             GuessBtn.IsVisible = false;
+
+            gameSaveDataViewModel.SaveData(userName);
         }
 
     } // class
