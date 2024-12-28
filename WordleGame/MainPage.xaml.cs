@@ -16,6 +16,8 @@ namespace WordleGame
 
         // Game States
         private bool hasPrompted = false;
+        private bool hasSetupGame = false;
+        private bool hasSetupGrid = false;
 
         // Variables
         private string userName;
@@ -94,6 +96,8 @@ namespace WordleGame
         // Loads word list and valid guesses list
         private async void SetupGame()
         {
+            if (hasSetupGame) return;
+
             try
             {
                 await wordModel.LoadWords();
@@ -114,10 +118,14 @@ namespace WordleGame
                 FeedbackLabel.Text = $"Error loading valid guesses list: {ex.Message}";
                 Debug.WriteLine($"Error: {ex.Message}");
             }
+
+            hasSetupGame = true;
         }
 
         private void SetupGrid()
         {
+            if (hasSetupGrid) return;
+
             // Define rows and columns
             for (int row = 0; row < MaxAttempts; row++)
             {
@@ -141,6 +149,7 @@ namespace WordleGame
                     WordGrid.Children.Add(cellLabel);
                 }
             }
+            hasSetupGrid = true;
         } // SetupGrid
 
         // Creates a styled label for a cell in the Wordle grid
@@ -331,7 +340,6 @@ namespace WordleGame
             await Navigation.PushAsync(new StatisticsPage(userName));
 
         }
-
 
         private bool CheckGameOver()
         {
