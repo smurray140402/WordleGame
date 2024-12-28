@@ -35,11 +35,11 @@ namespace WordleGame
 
         }
 
-        // When page appears focus on the entry box and call on PromptUsername()
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
+            // Prompt for username followed by grid and game setup.
             await Task.Delay(1000);
             await PromptUsername();
             SetupGrid();
@@ -174,30 +174,17 @@ namespace WordleGame
 
         private void PopulateGridWithSavedGuesses(List<string> guesses)
         {
-            foreach (var guess in guesses.Select((value, index) => new { value, index }))
-            {
-                var guessText = guess.value;
-                var rowIndex = guess.index;
 
-                // Populate each letter in the row
+            for (int rowIndex = 0; rowIndex < Math.Min(guesses.Count, MaxAttempts); rowIndex++)
+            {
+                var guessText = guesses[rowIndex];
+                var backgroundColours = CheckGuessAaginstWord(guessText);
+
                 for (int col = 0; col < WordLength; col++)
                 {
                     var label = (Label)WordGrid.Children[rowIndex * WordLength + col];
                     label.Text = guessText[col].ToString();
-
-                    // Determine background color for the letter
-                    if (guessText[col] == targetWord[col])
-                    {
-                        label.BackgroundColor = Colors.Green;
-                    }
-                    else if (targetWord.Contains(guessText[col]))
-                    {
-                        label.BackgroundColor = Colors.Yellow;
-                    }
-                    else
-                    {
-                        label.BackgroundColor = Colors.Gray;
-                    }
+                    label.BackgroundColor = backgroundColours[col];
                 }
             }
         }
@@ -246,63 +233,18 @@ namespace WordleGame
         } // OnGuessBtnClicked
 
 
-
         // Check the users guess against target word and update the grid
         private void GuessCheck(string guess)
         {
-            // Dictionary to store the count of each letter in the target word
-            var letterCount = new Dictionary<char, int>();
+            // Check the guess against the target word and get the background colours
+            var backgroundColours = CheckGuessAaginstWord(guess);
 
-            // Counter for letters in the targetWord
-            foreach (var letter in targetWord)
-            {
-                if (letterCount.ContainsKey(letter))
-                {
-                    letterCount[letter]++;
-                }
-                else
-                {
-                    letterCount[letter] = 1;
-                }
-            }
-
-            // Loop that checks for letters in the correct position
+            // Loop that updates the labels in the grid with the guessed letters and background colour
             for (int col = 0; col < WordLength; col++)
             {
                 var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
                 label.Text = guess[col].ToString();
-
-                // Decrements the letterCount so a letter will only change to yellow if there is atleast one remaining letter after the greens are accounted for
-                if (guess[col] == targetWord[col])
-                {
-                    letterCount[guess[col]]--;
-                }
-            }
-
-            // Loop that changes the labels background colours according to the letters
-            for (int col = 0; col < WordLength; col++)
-            {
-                var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
-
-                // Correct position
-                if (guess[col] == targetWord[col])
-                {
-                    label.BackgroundColor = Colors.Green;
-                    continue;
-                }
-
-                // Letter in word but not that position
-                if (letterCount.ContainsKey(guess[col]) && letterCount[guess[col]] > 0)
-                {
-                    label.BackgroundColor = Colors.Yellow;
-                    letterCount[guess[col]]--;
-                }
-
-                // Letter not in word
-                else
-                {
-                    label.BackgroundColor = Colors.Gray;
-                }
+                label.BackgroundColor = backgroundColours[col];
             }
 
             gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1, guess);
@@ -411,6 +353,62 @@ namespace WordleGame
 
             gameSaveDataViewModel.SaveData(userName);
         }
+
+        // Function to check guess against the target word
+        // Returns list of colours for the game grid and the emoji grid to use
+        private List<Color> CheckGuessAaginstWord(string guess)
+        {
+
+            var backgroundColours = new List<Color>(new Color[WordLength]);
+
+            // Dictionary to store the count of each letter in the target word
+            var letterCount = new Dictionary<char, int>();
+
+            // Counter for letters in the targetWord
+            foreach (var letter in targetWord)
+            {
+                if (letterCount.ContainsKey(letter))
+                {
+                    letterCount[letter]++;
+                }
+                else
+                {
+                    letterCount[letter] = 1;
+                }
+            }
+
+            // Loop that checks for letters in the correct position
+            for (int col = 0; col < WordLength; col++)
+            {
+                // Decrements the letterCount so a letter will only change to yellow if there is atleast one remaining letter after the greens are accounted for
+                if (guess[col] == targetWord[col])
+                {
+                    letterCount[guess[col]]--;
+                    backgroundColours[col] = Colors.Green;
+                }
+            }
+
+            // Loop that changes the labels background colours according to the letters
+            for (int col = 0; col < WordLength; col++)
+            {
+
+                // Letter in word but not that position
+                if (guess[col] != targetWord[col] && letterCount.ContainsKey(guess[col]) && letterCount[guess[col]] > 0)
+                {
+                    backgroundColours[col] = Colors.Yellow;
+                    letterCount[guess[col]]--;
+                }
+
+                // Letter not in word
+                else if (backgroundColours[col] != Colors.Green)
+                {
+                    backgroundColours[col] = Colors.Gray;
+                }
+            }
+
+            return backgroundColours;
+
+        } // CheckGuessAgainstWord
 
     } // class
 
