@@ -254,16 +254,12 @@ namespace WordleGame
                 }
             }
 
+            gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1, guess);
+
             if (guess == targetWord)
             {
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
                 FeedbackLabel.TextColor = Colors.Green;
-
-                // Save Progress
-                // TODO: At the minute it only saves progress for successful tries. Need to add it for unsuccessful tries/
-                //       Also need to implement a way that if I leave halfway through a go and come back it is saved to be resumed.
-
-                gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1);
 
                 // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
                 currentAttempt = MaxAttempts;

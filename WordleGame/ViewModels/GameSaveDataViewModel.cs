@@ -38,20 +38,34 @@ public class GameSaveDataViewModel
 		File.WriteAllText(SaveFilePath, jsonString);
 	}
 
-	public void AddProgress(string username, string name, string word, int attempts)
+	public void AddProgress(string username, string name, string word, int attempts, string guess)
 	{
-		LoadData(username);
+        // Check if the user already has saved progress for this word
+        var existingProgress = SavedDataList.FirstOrDefault(data => data.Username == username && data.Word == word);
 
-		var newProgress = new GameSaveData
+		// If not make a new progress
+		if (existingProgress == null)
 		{
-			Username = username,
-			Name = name,
-			Word = word,
-			Attempts = attempts,
-			Timestamp = DateTime.Now
-		};
+			var newProgress = new GameSaveData
+			{
+				Username = username,
+				Name = name,
+				Word = word,
+				Attempts = attempts,
+				Timestamp = DateTime.Now,
+				Guesses = new List<string> { guess }
+			};
 
-		SavedDataList.Add(newProgress);
+			SavedDataList.Add(newProgress);
+		}
+
+		// If they do just update the attempts, timestamp and add each guess
+		else
+		{
+			existingProgress.Attempts++;
+			existingProgress.Timestamp = DateTime.Now;
+			existingProgress.Guesses.Add(guess);
+		}
 
 		SaveData(username);
 	}
