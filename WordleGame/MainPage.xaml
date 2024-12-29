@@ -9,6 +9,9 @@
         <!-- Title -->
         <Label Text="Wordle Game" HorizontalOptions="Center" FontAttributes="Bold"  FontSize="30" Margin="0, 20"/>
 
+        <!-- Label for feedback -->
+        <Label x:Name="FeedbackLabel" FontSize="16" TextColor="Red" HorizontalOptions="Center" Margin="0,10"/>
+
         <!-- Settings and View Stats -->
         <!-- How to play and Scores page might be added here in time -->
         <StackLayout  x:Name="NavigationButtons"
@@ -32,6 +35,8 @@
 
         </StackLayout>
 
+        <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"/>
+
         <!-- Wordle Grid -->
         <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5">
             <!-- Content added here dynamically -->
@@ -43,9 +48,6 @@
             <Button x:Name="GuessBtn" Opacity="0" Text="Guess!" Clicked="OnGuessBtnClicked"/>
         </HorizontalStackLayout>
 
-        <!-- Label for feedback -->
-        <Label x:Name="FeedbackLabel" FontSize="16" TextColor="Red" HorizontalOptions="Center" Margin="0,10"/>
-        
     </VerticalStackLayout>
     
 </ContentPage>

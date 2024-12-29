@@ -18,6 +18,7 @@ namespace WordleGame
         private bool hasPrompted = false;
         private bool hasSetupGame = false;
         private bool hasSetupGrid = false;
+        private bool isNewGame = false;
 
         // Variables
         private string userName;
@@ -93,54 +94,6 @@ namespace WordleGame
 
         }
 
-        // Loads word list and valid guesses list
-        private async void SetupGame()
-        {
-            if (hasSetupGame) return;
-
-            try
-            {
-                await wordModel.LoadWords();
-
-                // Retrieve saved progress for the user
-                var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
-                var latestProgress = userProgress?.OrderByDescending(p => p.Timestamp).FirstOrDefault();
-
-                // Resume Progress
-                if (latestProgress != null && latestProgress.Attempts < MaxAttempts && latestProgress.Guesses.Last() != latestProgress.Word)
-                {
-                    targetWord = latestProgress.Word;
-                    currentAttempt = latestProgress.Attempts;
-                    PopulateGridWithSavedGuesses(latestProgress.Guesses);
-                    FeedbackLabel.Text = $"{MaxAttempts - currentAttempt} attempts left!";
-                }
-                // For starting a new game
-                else
-                {
-                    targetWord = wordModel.GetRandomWord().ToUpper();
-                    FeedbackLabel.Text = $"You have {MaxAttempts} attempts to guess the word!";
-
-                    Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n"); // This is just so I can check what target word is for testing
-                }
-            }
-            catch (Exception ex)
-            {
-                FeedbackLabel.Text = $"Error loading word list: {ex.Message}";
-                Debug.WriteLine($"Error: {ex.Message}");
-            }
-            try
-            {
-                await wordModel.LoadValidGuesses();
-            }
-            catch (Exception ex)
-            {
-                FeedbackLabel.Text = $"Error loading valid guesses list: {ex.Message}";
-                Debug.WriteLine($"Error: {ex.Message}");
-            }
-
-            hasSetupGame = true;
-        }
-
         private void SetupGrid()
         {
             if (hasSetupGrid) return;
@@ -172,13 +125,134 @@ namespace WordleGame
         } // SetupGrid
 
 
+        // Loads word list and valid guesses list
+        private async void SetupGame()
+        {
+            if (hasSetupGame) return;
+
+            try
+            {
+                await wordModel.LoadWords();
+
+                // Retrieve saved progress for the user
+                var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
+                var latestProgress = userProgress?.OrderByDescending(p => p.Timestamp).FirstOrDefault();
+
+                // Start new game 
+                if (isNewGame)
+                {
+                    targetWord = wordModel.GetRandomWord().ToUpper();
+                    isNewGame = false;
+                    Debug.WriteLine($"New target word: {targetWord}");
+                }
+                // Resume Progress
+                else if (latestProgress != null && latestProgress.Attempts < MaxAttempts && latestProgress.Guesses.Last() != latestProgress.Word)
+                {
+                    targetWord = latestProgress.Word;
+                    currentAttempt = latestProgress.Attempts;
+                    PopulateGridWithSavedGuesses(latestProgress.Guesses);
+                    FeedbackLabel.Text = $"{MaxAttempts - currentAttempt} attempts left!";
+                }
+                // For starting a new game
+                else
+                {
+                    targetWord = wordModel.GetRandomWord().ToUpper();
+                    FeedbackLabel.Text = $"You have {MaxAttempts} attempts to guess the word!";
+                    Debug.WriteLine("\n\n\n\n\n" + targetWord + "\n\n\n\n\n"); // This is just so I can check what target word is for testing
+                }
+            }
+            catch (Exception ex)
+            {
+                FeedbackLabel.Text = $"Error loading word list: {ex.Message}";
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+            try
+            {
+                await wordModel.LoadValidGuesses();
+            }
+            catch (Exception ex)
+            {
+                FeedbackLabel.Text = $"Error loading valid guesses list: {ex.Message}";
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
+
+            hasSetupGame = true;
+        }
+
+
+        private void StartNewGame()
+        {
+            ResetGameState();
+            ResetGrid();
+            UserInput.IsVisible = true;
+            GuessBtn.IsVisible = true;
+            StartGameBtn.IsVisible = false;
+
+            FeedbackLabel.Text = $"You have {MaxAttempts} attempts to guess the word!";
+            SetupGame();
+            OnAppearing();
+        }
+
+
+        private void ResetGameState()
+        {
+            FeedbackLabel.TextColor = Colors.Red;
+            currentAttempt = 0;
+            targetWord = string.Empty;
+            hasSetupGame = false;
+            isNewGame = true;
+        }
+
+        private void ResetGrid()
+        {
+            foreach (var child in WordGrid.Children)
+            {
+                if (child is Label label)
+                {
+                    label.Text = string.Empty;
+                    label.BackgroundColor = Colors.LightGray;
+                }
+            }
+        }
+
+
+        // Check the users guess against target word and update the grid
+        private void GuessCheck(string guess)
+        {
+            // Check the guess against the target word and get the background colours
+            var backgroundColours = CheckGuessAgainstWord(guess);
+
+            // Loop that updates the labels in the grid with the guessed letters and background colour
+            for (int col = 0; col < WordLength; col++)
+            {
+                var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
+                label.Text = guess[col].ToString();
+                label.BackgroundColor = backgroundColours[col];
+            }
+
+            gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1, guess);
+
+            if (guess == targetWord)
+            {
+                FeedbackLabel.Text = "Congratulations! You guessed the word.";
+                FeedbackLabel.TextColor = Colors.Green;
+
+                // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
+                currentAttempt = MaxAttempts;
+                EndGame();
+            }
+
+            currentAttempt++;
+        } // GuessCheck
+
+
         private void PopulateGridWithSavedGuesses(List<string> guesses)
         {
 
             for (int rowIndex = 0; rowIndex < Math.Min(guesses.Count, MaxAttempts); rowIndex++)
             {
                 var guessText = guesses[rowIndex];
-                var backgroundColours = CheckGuessAaginstWord(guessText);
+                var backgroundColours = CheckGuessAgainstWord(guessText);
 
                 for (int col = 0; col < WordLength; col++)
                 {
@@ -187,6 +261,7 @@ namespace WordleGame
                     label.BackgroundColor = backgroundColours[col];
                 }
             }
+            StartGameBtn.IsVisible = false;
         }
 
 
@@ -205,6 +280,7 @@ namespace WordleGame
                 Margin = 2
             };
         } // CreateCellLabel
+
 
         // When guess is clicked or when enter key is entered
         private void OnGuessBtnClicked(object sender, EventArgs e)
@@ -233,36 +309,6 @@ namespace WordleGame
         } // OnGuessBtnClicked
 
 
-        // Check the users guess against target word and update the grid
-        private void GuessCheck(string guess)
-        {
-            // Check the guess against the target word and get the background colours
-            var backgroundColours = CheckGuessAaginstWord(guess);
-
-            // Loop that updates the labels in the grid with the guessed letters and background colour
-            for (int col = 0; col < WordLength; col++)
-            {
-                var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
-                label.Text = guess[col].ToString();
-                label.BackgroundColor = backgroundColours[col];
-            }
-
-            gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1, guess);
-
-            if (guess == targetWord)
-            {
-                FeedbackLabel.Text = "Congratulations! You guessed the word.";
-                FeedbackLabel.TextColor = Colors.Green;
-
-                // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
-                currentAttempt = MaxAttempts;
-                EndGame();
-            }
-
-            currentAttempt++;
-        } // GuessCheck
-
-        
 
         // If entry box text changes
         private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
@@ -306,29 +352,6 @@ namespace WordleGame
             UserInput.Text = typedText;
         }
 
-        // Refocus the Entry box if it loses focus
-        private void UserInput_Unfocused(object sender, FocusEventArgs e)
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await Task.Delay(100);
-                UserInput.Focus();
-            });
-        }
-
-        private async void OnSettingsClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new SettingsPage());
-        }
-
-        private async void OnViewStatisticsClicked(object sender, EventArgs e)
-        {
-            var progressList = gameSaveDataViewModel.GetSaveDataByUser(userName);
-
-            // Add error handling here
-            await Navigation.PushAsync(new StatisticsPage(userName));
-
-        }
 
         private bool CheckGameOver()
         {
@@ -346,17 +369,53 @@ namespace WordleGame
             return false;
         }
 
+
         private void EndGame()
         {
             UserInput.IsVisible = false;
             GuessBtn.IsVisible = false;
+            StartGameBtn.IsVisible = true;
 
             gameSaveDataViewModel.SaveData(userName);
         }
 
+
+
+        // Refocus the Entry box if it loses focus
+        private void UserInput_Unfocused(object sender, FocusEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Task.Delay(100);
+                UserInput.Focus();
+            });
+        }
+
+
+        private async void OnSettingsClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsPage());
+        }
+
+
+        private async void OnViewStatisticsClicked(object sender, EventArgs e)
+        {
+            var progressList = gameSaveDataViewModel.GetSaveDataByUser(userName);
+
+            // Add error handling here
+            await Navigation.PushAsync(new StatisticsPage(userName));
+        }
+
+
+        private void OnNewGameClicked(object sender, EventArgs e)
+        {
+            StartNewGame();
+        }
+
+
         // Function to check guess against the target word
         // Returns list of colours for the game grid and the emoji grid to use
-        private List<Color> CheckGuessAaginstWord(string guess)
+        private List<Color> CheckGuessAgainstWord(string guess)
         {
 
             var backgroundColours = new List<Color>(new Color[WordLength]);
