@@ -2,64 +2,61 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.MainPage"
-             Title="Wordle">
+             Title="WORDLE">
 
     <Grid>
-    <VerticalStackLayout HorizontalOptions="Center" Padding="10">
 
-        <!-- Title -->
-        <Label Text="Wordle Game" HorizontalOptions="Center" FontAttributes="Bold"  FontSize="30" Margin="0, 20"/>
+        <!-- Row 0 is for the icons and Row 1 is for the game grid and any buttons or labels-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <!-- Label for feedback -->
-        <Label x:Name="FeedbackLabel" FontSize="16" TextColor="Red" HorizontalOptions="Center" Margin="0,10"/>
+        <StackLayout Grid.Row="0" Orientation="Horizontal" HorizontalOptions="End" Spacing="25" Padding="10" Margin="40, 0" >
 
-        <!-- Settings and View Stats -->
-        <!-- How to play and Scores page might be added here in time -->
-        <StackLayout  x:Name="NavigationButtons"
-                      Orientation="Horizontal" 
-                      HorizontalOptions="Center" 
-                      Spacing="15">
+            <!-- Settings Icon -->
+            <ImageButton Source="settings_icon.png" 
+                         Clicked="OnSettingsClicked" 
+                         BackgroundColor="Transparent" 
+                         HeightRequest="30" WidthRequest="30"/>
 
-            <Button  Text="Settings" 
-                     Clicked="OnSettingsClicked" 
-                     BackgroundColor="MediumSeaGreen" 
-                     TextColor="White" 
-                     FontSize="14" 
-                     CornerRadius="10"/>
+            <!-- View Stats Icon -->
+            <ImageButton Source="stats_icon.png" 
+                         Clicked="OnViewStatisticsClicked" 
+                         BackgroundColor="Transparent" 
+                         HeightRequest="30" WidthRequest="30"/>
 
-            <Button  Text="View Stats" 
-                     Clicked="OnViewStatisticsClicked"
-                     BackgroundColor="MediumSeaGreen" 
-                     TextColor="White" 
-                     FontSize="14" 
-                     CornerRadius="10"/>
+            <!-- How to Play Icon -->
+            <ImageButton Source="how_to_play_icon.png" 
+                         Clicked="OnHowToPlayClicked" 
+                         BackgroundColor="Transparent" 
+                         HeightRequest="30" WidthRequest="30"/>
+        </StackLayout>
 
-            <Button Text="How to Play" 
-                    Clicked="OnHowToPlayClicked"
-                    BackgroundColor="MediumSeaGreen" 
-                    TextColor="White" 
-                    FontSize="14" 
-                    CornerRadius="10"/>
 
-            </StackLayout>
+        <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" Padding="10">
 
-        <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"/>
+            <!-- Label for feedback -->
+            <Label x:Name="FeedbackLabel" FontSize="16" TextColor="Red" HorizontalOptions="Center" Margin="0,10"/>
 
-        <!-- Wordle Grid -->
-        <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5">
-            <!-- Content added here dynamically -->
-        </Grid>
 
-        <!-- Input -->
-        <HorizontalStackLayout Margin="0,20">
-            <Entry x:Name="UserInput" Placeholder="Guess the word!" Opacity="0" WidthRequest="200" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
-            <Button x:Name="GuessBtn" Opacity="0" Text="Guess!" Clicked="OnGuessBtnClicked"/>
-        </HorizontalStackLayout>
+            <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"/>
 
-    </VerticalStackLayout>
+            <!-- Wordle Grid -->
+            <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5">
+                <!-- Content added here dynamically -->
+            </Grid>
+
+            <!-- Input -->
+            <HorizontalStackLayout Margin="0,20">
+                <Entry x:Name="UserInput" Placeholder="Guess the word!" Opacity="0" WidthRequest="200" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
+                <Button x:Name="GuessBtn" Opacity="0" Text="Guess!" Clicked="OnGuessBtnClicked"/>
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
 
         <!-- Custom Alert -->
-        <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="#80000000">
+        <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="#90009000" Grid.Row="1">
             <Frame Padding="20" CornerRadius="10" BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="How to Play" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center"/>
@@ -132,7 +129,9 @@
                         <Label Text="U is not in the word in any spot." FontSize="14" Margin="10,0,0,10" />
                     </StackLayout>
 
+                    <!-- Close custom alert -->
                     <Button Text="Close" Clicked="OnCloseAlert" BackgroundColor="MediumSeaGreen" TextColor="White"/>
+                    
                 </StackLayout>
             </Frame>
         </ContentView>
