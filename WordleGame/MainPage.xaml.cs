@@ -412,6 +412,18 @@ namespace WordleGame
             StartNewGame();
         }
 
+        private void OnHowToPlayClicked(object sender, EventArgs e)
+        {
+            // Show the custom alert
+            CustomAlert.IsVisible = true;
+        }
+
+        private void OnCloseAlert(object sender, EventArgs e)
+        {
+            // Hide the custom alert
+            CustomAlert.IsVisible = false;
+        }
+
 
         // Function to check guess against the target word
         // Returns list of colours for the game grid and the emoji grid to use
