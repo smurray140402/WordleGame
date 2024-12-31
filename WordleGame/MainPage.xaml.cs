@@ -19,6 +19,7 @@ namespace WordleGame
         private bool hasSetupGame = false;
         private bool hasSetupGrid = false;
         private bool isNewGame = false;
+        private bool isCompleted = false;
 
         // Variables
         private string userName;
@@ -201,6 +202,7 @@ namespace WordleGame
             targetWord = string.Empty;
             hasSetupGame = false;
             isNewGame = true;
+            isCompleted = false;
         }
 
         private void ResetGrid()
@@ -230,8 +232,6 @@ namespace WordleGame
                 label.BackgroundColor = backgroundColours[col];
             }
 
-            gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1, guess);
-
             if (guess == targetWord)
             {
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
@@ -239,8 +239,11 @@ namespace WordleGame
 
                 // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
                 currentAttempt = MaxAttempts;
+                isCompleted = true;
                 EndGame();
             }
+
+            gameSaveDataViewModel.AddProgress(userName, fullName, targetWord, currentAttempt + 1, guess, isCompleted);
 
             currentAttempt++;
         } // GuessCheck

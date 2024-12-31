@@ -20,7 +20,13 @@ public partial class StatisticsPage : ContentPage
 	{
 		var progressList = gameSaveDataViewModel.GetSaveDataByUser(userName);
 
-		if (progressList.Any())
+		int totalGames = progressList.Count;
+		int completedGames = progressList.Count(game => game.Completed);
+		int winPercentage = totalGames > 0 ? (int)((completedGames / (double)totalGames) * 100) : 0;
+
+        StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%";
+
+        /*if (progressList.Any())
 		{
 			// Iterates through every item in progressList and binds to StatisticsListView
 			StatisticsListView.ItemsSource = progressList.Select(progressItem => new
@@ -33,6 +39,6 @@ public partial class StatisticsPage : ContentPage
 		else
 		{
 			StatisticsFeedbackLabel.Text = "No game statistics available";
-		}
-	}
+		}*/
+    }
 }
