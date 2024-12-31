@@ -36,7 +36,7 @@ public partial class StatisticsPage : ContentPage
 
         StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%\nCurrent Streak: {currentStreak}\nMax Streak: {maxStreak}\n\nGuess Distribution:\n{guessCountText}";
 
-        /*if (progressList.Any())
+        if (progressList.Any())
 		{
 			// Iterates through every item in progressList and binds to StatisticsListView
 			StatisticsListView.ItemsSource = progressList.Select(progressItem => new
@@ -49,6 +49,6 @@ public partial class StatisticsPage : ContentPage
 		else
 		{
 			StatisticsFeedbackLabel.Text = "No game statistics available";
-		}*/
+		}
     }
 }

@@ -9,7 +9,7 @@
             <Label Text="Your Game Statistics" FontSize="24" HorizontalOptions="Center" Margin="0, 20"/>
             <Label x:Name="StatisticsFeedbackLabel" Text="" FontSize="18" HorizontalOptions="Center" Margin="0, 20"/>
 
-            <!-- ListView that displays previous words, attempts and dates. Only successful tries for now.
+            <!-- ListView that displays previous words, attempts and dates. Only successful tries for now.  -->
             <ListView x:Name="StatisticsListView">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -22,7 +22,7 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView> -->
+            </ListView>
 
         </VerticalStackLayout>
     </ScrollView>
