@@ -27,7 +27,14 @@ public partial class StatisticsPage : ContentPage
         // Get both current streak and max streak by calling the GetCurrentAndMaxStreak method
         var (currentStreak, maxStreak) = gameSaveDataViewModel.GetCurrentAndMaxStreak(userName);
 
-        StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%\nCurrent Streak: {currentStreak}\nMax Streak: {maxStreak}";
+        // Get the guess count distribution (1 to 6 guesses)
+        var guessCounts = gameSaveDataViewModel.GetGuessCountsByUser(userName);
+
+        // Create a text representation of the guess count
+		// TODO: Make a visual representation instead of a text representation.
+        string guessCountText = $"1 Guess: {guessCounts[0]}\n2 Guesses: {guessCounts[1]}\n3 Guesses: {guessCounts[2]}\n4 Guesses: {guessCounts[3]}\n5 Guesses: {guessCounts[4]}\n6 Guesses: {guessCounts[5]}";
+
+        StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%\nCurrent Streak: {currentStreak}\nMax Streak: {maxStreak}\n\nGuess Distribution:\n{guessCountText}";
 
         /*if (progressList.Any())
 		{

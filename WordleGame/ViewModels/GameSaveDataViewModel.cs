@@ -155,4 +155,29 @@ public class GameSaveDataViewModel
 		return (currentStreak, maxStreak);
 	}
 
+	// Gets the distribution of guess attempts 
+    public List<int> GetGuessCountsByUser(string username)
+    {
+        LoadData(username);
+
+        // Initialize a list to hold counts for the number of guesses
+        List<int> guessCounts = new List<int> { 0, 0, 0, 0, 0, 0 };  
+
+        // Loop through each game
+        foreach (var game in SavedDataList)
+        {
+			// Only takes into account completed games
+            if (game.Completed)
+            {
+                // Check how many attempts the user made and update the count
+                if (game.Attempts >= 1 && game.Attempts <= 6)
+                {
+                    guessCounts[game.Attempts - 1]++;
+                }
+            }
+        }
+
+        return guessCounts;
+    }
+
 }
