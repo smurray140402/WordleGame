@@ -24,7 +24,10 @@ public partial class StatisticsPage : ContentPage
 		int completedGames = progressList.Count(game => game.Completed);
 		int winPercentage = totalGames > 0 ? (int)((completedGames / (double)totalGames) * 100) : 0;
 
-        StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%";
+        // Get both current streak and max streak by calling the GetCurrentAndMaxStreak method
+        var (currentStreak, maxStreak) = gameSaveDataViewModel.GetCurrentAndMaxStreak(userName);
+
+        StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%\nCurrent Streak: {currentStreak}\nMax Streak: {maxStreak}";
 
         /*if (progressList.Any())
 		{

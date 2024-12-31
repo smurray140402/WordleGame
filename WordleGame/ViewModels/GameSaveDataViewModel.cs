@@ -27,6 +27,7 @@ public class GameSaveDataViewModel
 			// Deserialise the JSON data into a list of GameSaveData objects. If it fails it initiliases an empty list
 			SavedDataList = JsonSerializer.Deserialize<List<GameSaveData>>(json) ?? new List<GameSaveData>();
 		}
+
 	} // load data
 
 	public void SaveData(string username)
@@ -40,6 +41,37 @@ public class GameSaveDataViewModel
 
 	public void AddProgress(string username, string name, string word, int attempts, string guess, bool isCompleted)
 	{
+		// This is the mostly the same as the GetCurrentAndMaxStreak method
+		// To reduce overlapping code we could create a helper method that both access
+        LoadData(username);
+
+		// Sort data in ascending order
+        var userGames = SavedDataList.OrderBy(game => game.Timestamp).ToList();
+
+        int currentStreak = 0;
+        int maxStreak = 0;
+
+		// Loop though each game in users game history 
+        foreach (var game in userGames)
+        {
+            if (game.Completed)
+            {
+                currentStreak++;
+
+				// If currentStreak is higher update maxStreak
+                if (currentStreak > maxStreak)
+                {
+                    maxStreak = currentStreak;
+                }
+            }
+            else
+            {	
+				// If game was lost reset current streak
+                currentStreak = 0; ;
+            }
+        }
+
+
         // Check if the user already has saved progress for this word
         var existingProgress = SavedDataList.FirstOrDefault(data => data.Username == username && data.Word == word);
 
@@ -54,7 +86,8 @@ public class GameSaveDataViewModel
 				Attempts = attempts,
 				Timestamp = DateTime.Now,
 				Guesses = new List<string> { guess },
-				Completed = isCompleted
+				Completed = isCompleted,
+				MaxStreak = maxStreak
 			};
 
 			SavedDataList.Add(newProgress);
@@ -67,7 +100,12 @@ public class GameSaveDataViewModel
 			existingProgress.Timestamp = DateTime.Now;
 			existingProgress.Guesses.Add(guess);
 			existingProgress.Completed = isCompleted;
-		}
+
+            if (currentStreak > existingProgress.MaxStreak)
+            {
+                existingProgress.MaxStreak = currentStreak;
+            }
+        }
 
 		SaveData(username);
 	}
@@ -77,7 +115,44 @@ public class GameSaveDataViewModel
 	{
 		LoadData(username);
 		return SavedDataList;
+	}
 
+	// Returns a tuple for the StatisticsPage
+	public (int currentStreak, int maxStreak) GetCurrentAndMaxStreak(string username)
+	{
+		LoadData(username);
+
+        // Sort data in ascending order
+        var userGames = SavedDataList.OrderBy(game => game.Timestamp).ToList();
+
+		int currentStreak = 0;
+		int maxStreak = 0;
+
+        // Loop though each game in users game history 
+        foreach (var game in userGames)
+		{
+			if (game.Completed)
+			{
+				currentStreak++;
+
+                // If currentStreak is higher update maxStreak
+                if (currentStreak > maxStreak)
+				{
+					game.MaxStreak = currentStreak;
+					maxStreak = currentStreak;
+				}
+            }
+			else
+			{
+                // If game was lost reset current streak
+                currentStreak = 0; ;
+			}
+		}
+
+		SaveData(username);
+
+		// Return a tuple with the current streak and the max streak
+		return (currentStreak, maxStreak);
 	}
 
 }

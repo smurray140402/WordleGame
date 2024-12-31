@@ -9,5 +9,6 @@ public class GameSaveData
     public DateTime Timestamp { get; set; }
     public List<string> Guesses { get; set; } = new List<string>();
     public bool Completed { get; set; }
+    public int MaxStreak { get; set; }
 
 }
