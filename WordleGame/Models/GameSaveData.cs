@@ -10,5 +10,6 @@ public class GameSaveData
     public List<string> Guesses { get; set; } = new List<string>();
     public bool Completed { get; set; }
     public int MaxStreak { get; set; }
+    public bool Finished { get; set; }
 
 }

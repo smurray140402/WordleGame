@@ -139,6 +139,13 @@ namespace WordleGame
                 var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
                 var latestProgress = userProgress?.OrderByDescending(p => p.Timestamp).FirstOrDefault();
 
+                // Check if there is any unfinished game, and mark it as finished if necessary
+                if (latestProgress != null && latestProgress.Attempts >= MaxAttempts && !latestProgress.Finished)
+                {
+                    latestProgress.Finished = true;
+                    gameSaveDataViewModel.SaveData(userName);
+                }
+
                 // Start new game 
                 if (isNewGame)
                 {
@@ -153,6 +160,7 @@ namespace WordleGame
                     currentAttempt = latestProgress.Attempts;
                     PopulateGridWithSavedGuesses(latestProgress.Guesses);
                     FeedbackLabel.Text = $"{MaxAttempts - currentAttempt} attempts left!";
+                    StartGameBtn.IsVisible = true;
                 }
                 // For starting a new game
                 else
@@ -183,6 +191,16 @@ namespace WordleGame
 
         public void StartNewGame()
         {
+            // Mark the previous game as finished before starting a new one
+            var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
+            var latestProgress = userProgress?.OrderByDescending(p => p.Timestamp).FirstOrDefault();
+
+            if (latestProgress != null && !latestProgress.Finished)
+            {
+                latestProgress.Finished = true;
+                gameSaveDataViewModel.SaveData(userName);
+            }
+
             ResetGameState();
             ResetGrid();
             UserInput.IsVisible = true;
@@ -223,6 +241,7 @@ namespace WordleGame
         // Check the users guess against target word and update the grid
         private void GuessCheck(string guess)
         {
+            StartGameBtn.IsVisible = true;
             // Check the guess against the target word and get the background colours
             var backgroundColours = CheckGuessAgainstWord(guess);
 
@@ -377,6 +396,16 @@ namespace WordleGame
 
         private void EndGame()
         {
+            // Set the game as finished when it's ended
+            var userProgress = gameSaveDataViewModel.GetSaveDataByUser(userName);
+            var latestProgress = userProgress?.OrderByDescending(p => p.Timestamp).FirstOrDefault();
+
+            if (latestProgress != null)
+            {
+                latestProgress.Finished = true;
+                gameSaveDataViewModel.SaveData(userName);
+            }
+
             UserInput.IsVisible = false;
             GuessBtn.IsVisible = false;
             StartGameBtn.IsVisible = true;

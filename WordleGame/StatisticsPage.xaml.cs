@@ -20,6 +20,8 @@ public partial class StatisticsPage : ContentPage
 	{
 		var progressList = gameSaveDataViewModel.GetSaveDataByUser(userName);
 
+		var filteredProgressList = progressList.Where(progressItem => progressItem.Finished).ToList();
+
 		int totalGames = progressList.Count;
 		int completedGames = progressList.Count(game => game.Completed);
 		int winPercentage = totalGames > 0 ? (int)((completedGames / (double)totalGames) * 100) : 0;
@@ -36,10 +38,10 @@ public partial class StatisticsPage : ContentPage
 
         StatisticsFeedbackLabel.Text = $"Games Played: {totalGames}\nWin %: {winPercentage}%\nCurrent Streak: {currentStreak}\nMax Streak: {maxStreak}\n\nGuess Distribution:\n{guessCountText}";
 
-        if (progressList.Any())
+        if (filteredProgressList.Any())
 		{
 			// Iterates through every item in progressList and binds to StatisticsListView
-			StatisticsListView.ItemsSource = progressList.Select(progressItem => new
+			StatisticsListView.ItemsSource = filteredProgressList.Select(progressItem => new
 			{
 				Word = progressItem.Word,
 				Attempts = progressItem.Attempts,
