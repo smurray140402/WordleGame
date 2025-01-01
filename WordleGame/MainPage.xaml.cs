@@ -181,13 +181,15 @@ namespace WordleGame
         }
 
 
-        private void StartNewGame()
+        public void StartNewGame()
         {
             ResetGameState();
             ResetGrid();
             UserInput.IsVisible = true;
             GuessBtn.IsVisible = true;
             StartGameBtn.IsVisible = false;
+
+            Debug.WriteLine("\n\nNew Game Started\n\n");
 
             FeedbackLabel.Text = $"You have {MaxAttempts} attempts to guess the word!";
             SetupGame();
@@ -397,7 +399,8 @@ namespace WordleGame
 
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new SettingsPage());
+            var settingsPage = new SettingsPage(userName, gameSaveDataViewModel);
+            await Navigation.PushAsync(settingsPage);
         }
 
 

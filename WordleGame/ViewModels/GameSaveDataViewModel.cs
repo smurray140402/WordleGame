@@ -180,4 +180,11 @@ public class GameSaveDataViewModel
         return guessCounts;
     }
 
+    // Clears all 'in-memory data', ensuring that any previously cached or stored game data is deleted.
+    public void ClearData()
+    {
+        SavedDataList.Clear();
+        // If you have other data members, clear them as well
+    }
+
 }
