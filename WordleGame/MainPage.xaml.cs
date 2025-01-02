@@ -26,7 +26,7 @@ namespace WordleGame
         private string fullName;
         private string targetWord; 
         private int currentAttempt = 0;
-
+        double maxHeight;
 
         public MainPage()
         {
@@ -34,7 +34,37 @@ namespace WordleGame
 
             wordModel = new WordViewModel();
             gameSaveDataViewModel = new GameSaveDataViewModel();
+            this.LayoutChanged += OnWindowChange;
+        }
 
+        private void OnWindowChange(object sender, EventArgs e)
+        {
+            double maxWidth = this.Width - 10;
+            maxHeight = this.Height - Icons.Height - FeedbackLabel.Height - StartGameBtn.Height - (this.Height / 5);
+
+            // Makes sure grid is equal and max size
+            if (maxWidth < maxHeight)
+            {
+                WordGrid.HeightRequest = maxWidth;
+                WordGrid.WidthRequest = maxWidth;
+            }
+            else
+            {
+                WordGrid.HeightRequest = maxHeight;
+                WordGrid.WidthRequest = maxHeight;
+            }
+
+            // Iterate through each label in the grid and adjust the font size
+            foreach (var child in WordGrid.Children)
+            {
+                if (child is Label label)
+                {
+                    label.HorizontalTextAlignment = TextAlignment.Center;
+                    label.VerticalTextAlignment = TextAlignment.Center;
+
+                    label.FontSize = WordGrid.HeightRequest/10;
+                }
+            }
         }
 
         protected override async void OnAppearing()
@@ -102,12 +132,12 @@ namespace WordleGame
             // Define rows and columns
             for (int row = 0; row < MaxAttempts; row++)
             {
-                WordGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                WordGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             }
 
             for (int col = 0; col < WordLength; col++)
             {
-                WordGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                WordGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             }
 
             // Add labels for each cell
@@ -305,9 +335,9 @@ namespace WordleGame
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
                 BackgroundColor = (Color)Application.Current.Resources["LabelColour"],
-                FontSize = 25,
-                WidthRequest = 40,
-                HeightRequest = 40,
+                FontSize = WordGrid.HeightRequest / 10,
+                MinimumWidthRequest = 40,
+                MinimumHeightRequest = 40,
                 Margin = 2
             };
         } // CreateCellLabel
