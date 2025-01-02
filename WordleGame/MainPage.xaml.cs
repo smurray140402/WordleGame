@@ -204,7 +204,7 @@ namespace WordleGame
             ResetGameState();
             ResetGrid();
             UserInput.IsVisible = true;
-            GuessBtn.IsVisible = true;
+            //GuessBtn.IsVisible = true;
             StartGameBtn.IsVisible = false;
 
             Debug.WriteLine("\n\nNew Game Started\n\n");
@@ -217,7 +217,7 @@ namespace WordleGame
 
         private void ResetGameState()
         {
-            FeedbackLabel.TextColor = Colors.Red;
+            FeedbackLabel.TextColor = (Color)Application.Current.Resources["Primary"];
             currentAttempt = 0;
             targetWord = string.Empty;
             hasSetupGame = false;
@@ -232,7 +232,7 @@ namespace WordleGame
                 if (child is Label label)
                 {
                     label.Text = string.Empty;
-                    label.BackgroundColor = Colors.LightGray;
+                    label.BackgroundColor = (Color)Application.Current.Resources["LabelColour"];
                 }
             }
         }
@@ -242,6 +242,8 @@ namespace WordleGame
         private void GuessCheck(string guess)
         {
             StartGameBtn.IsVisible = true;
+            FeedbackLabel.TextColor = (Color)Application.Current.Resources["Primary"];
+
             // Check the guess against the target word and get the background colours
             var backgroundColours = CheckGuessAgainstWord(guess);
 
@@ -251,12 +253,14 @@ namespace WordleGame
                 var label = (Label)WordGrid.Children[currentAttempt * WordLength + col];
                 label.Text = guess[col].ToString();
                 label.BackgroundColor = backgroundColours[col];
+
+                label.TextColor = (Color)Application.Current.Resources["Text"];
             }
 
             if (guess == targetWord)
             {
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
-                FeedbackLabel.TextColor = Colors.Green;
+                FeedbackLabel.TextColor = (Color)Application.Current.Resources["PopUpCorrect"];
 
                 // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
                 currentAttempt = MaxAttempts;
@@ -283,6 +287,7 @@ namespace WordleGame
                     var label = (Label)WordGrid.Children[rowIndex * WordLength + col];
                     label.Text = guessText[col].ToString();
                     label.BackgroundColor = backgroundColours[col];
+                    label.TextColor = (Color)Application.Current.Resources["Text"];
                 }
             }
             StartGameBtn.IsVisible = false;
@@ -295,10 +300,12 @@ namespace WordleGame
             return new Label
             {
                 Text = "",
+                TextColor = (Color)Application.Current.Resources["InitialText"],
+                FontAttributes = FontAttributes.Bold,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
-                BackgroundColor = Colors.LightGray,
-                FontSize = 20,
+                BackgroundColor = (Color)Application.Current.Resources["LabelColour"],
+                FontSize = 25,
                 WidthRequest = 40,
                 HeightRequest = 40,
                 Margin = 2
@@ -315,6 +322,7 @@ namespace WordleGame
 
             if (string.IsNullOrWhiteSpace(guess) || guess.Length != WordLength)
             {
+                FeedbackLabel.TextColor = (Color)Application.Current.Resources["FeedbackLabelWrong"];
                 FeedbackLabel.Text = "Please enter a valid 5 letter word.";
                 return;
             }
@@ -322,11 +330,12 @@ namespace WordleGame
             // Validate guessed word with valid guesses list to only let them guess if its a valid word
             if (!wordModel.ValidGuesses.Contains(guess.ToLower()))
             {
+                FeedbackLabel.TextColor = (Color)Application.Current.Resources["FeedbackLabelWrong"];
                 FeedbackLabel.Text = "Your guess is not a valid word please try again.";
                 return;
             }
 
-            FeedbackLabel.Text = "";
+            FeedbackLabel.Text = $"{MaxAttempts - currentAttempt} attempts left!";
             GuessCheck(guess);
             UserInput.Text = "";
 
@@ -338,7 +347,8 @@ namespace WordleGame
         private void OnUserInputTextChanged(object sender, TextChangedEventArgs e)
         {
             if (CheckGameOver()) return;
-            FeedbackLabel.Text = "";
+            FeedbackLabel.TextColor = (Color)Application.Current.Resources["Primary"];
+            FeedbackLabel.Text = $"{MaxAttempts - currentAttempt} attempts left!";
 
             // Gets any new text by user
             string? typedText = e.NewTextValue?.ToUpper();
@@ -369,6 +379,7 @@ namespace WordleGame
             // Automatically checks validation of word 
             if (typedText.Length == WordLength && !wordModel.ValidGuesses.Contains(typedText.ToLower()))
             {
+                FeedbackLabel.TextColor = (Color)Application.Current.Resources["FeedbackLabelWrong"];
                 FeedbackLabel.Text = "Your guess is not a valid word please try again.";
                 return;
             }
@@ -386,6 +397,7 @@ namespace WordleGame
 
             if (currentAttempt >= MaxAttempts)
             {
+                FeedbackLabel.TextColor = (Color)Application.Current.Resources["FeedbackLabelWrong"];
                 FeedbackLabel.Text = $"Game over! The word was {targetWord}.";
                 EndGame();
                 return true;
@@ -407,7 +419,7 @@ namespace WordleGame
             }
 
             UserInput.IsVisible = false;
-            GuessBtn.IsVisible = false;
+            //GuessBtn.IsVisible = false;
             StartGameBtn.IsVisible = true;
 
             gameSaveDataViewModel.SaveData(userName);
@@ -490,7 +502,7 @@ namespace WordleGame
                 if (guess[col] == targetWord[col])
                 {
                     letterCount[guess[col]]--;
-                    backgroundColours[col] = Colors.Green;
+                    backgroundColours[col] = (Color)Application.Current.Resources["PopUpCorrect"];
                 }
             }
 
@@ -501,14 +513,14 @@ namespace WordleGame
                 // Letter in word but not that position
                 if (guess[col] != targetWord[col] && letterCount.ContainsKey(guess[col]) && letterCount[guess[col]] > 0)
                 {
-                    backgroundColours[col] = Colors.Yellow;
+                    backgroundColours[col] = (Color)Application.Current.Resources["PopUpNearly"];
                     letterCount[guess[col]]--;
                 }
 
                 // Letter not in word
-                else if (backgroundColours[col] != Colors.Green)
+                else if (backgroundColours[col] != (Color)Application.Current.Resources["PopUpCorrect"])
                 {
-                    backgroundColours[col] = Colors.Gray;
+                    backgroundColours[col] = (Color)Application.Current.Resources["PopUpWrong"];
                 }
             }
 

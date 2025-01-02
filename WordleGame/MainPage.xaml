@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.MainPage"
-             Title="WORDLE">
+             Title="WORDLE"
+             BackgroundColor="{StaticResource BackgroundColour}">
 
     <Grid>
 
@@ -12,7 +13,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackLayout Grid.Row="0" Orientation="Horizontal" HorizontalOptions="End" Spacing="25" Padding="10" Margin="40, 0" >
+        <StackLayout Grid.Row="0" Orientation="Horizontal" HorizontalOptions="End" Spacing="20" Padding="10" Margin="20, 0" >
 
             <!-- Settings Icon -->
             <ImageButton Source="settings_icon.png" 
@@ -34,30 +35,32 @@
         </StackLayout>
 
 
-        <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" Padding="10">
+        <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" Padding="20" >
 
             <!-- Label for feedback -->
-            <Label x:Name="FeedbackLabel" FontSize="16" TextColor="Red" HorizontalOptions="Center" Margin="0,10"/>
+            <Label x:Name="FeedbackLabel" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalOptions="Center" Margin="0,10" CharacterSpacing="1.5"/>
 
 
-            <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"/>
+            <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"
+                    FontSize="16" CornerRadius="10" BackgroundColor="{StaticResource Primary}" 
+                    TextColor="{StaticResource Text}" WidthRequest="150" HeightRequest="50"/>
 
-            <!-- Wordle Grid -->
-            <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5">
+            <!-- Wordle Grid --> 
+            <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5" Margin="0,20">
                 <!-- Content added here dynamically -->
             </Grid>
 
             <!-- Input -->
             <HorizontalStackLayout Margin="0,20">
-                <Entry x:Name="UserInput" Placeholder="Guess the word!" Opacity="0" WidthRequest="200" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
-                <Button x:Name="GuessBtn" Opacity="0" Text="Guess!" Clicked="OnGuessBtnClicked"/>
+                <Entry x:Name="UserInput" Placeholder="Guess the word!" Opacity="0" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
+                <!-- <Button x:Name="GuessBtn" Text="Guess!" Clicked="OnGuessBtnClicked"/> -->
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
 
         <!-- Custom Alert -->
-        <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="#90009000" Grid.Row="1">
-            <Frame Padding="20" CornerRadius="10" BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="Center">
+        <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="{StaticResource PopUpExternalBackground}" Grid.Row="1">
+            <Frame Padding="20" CornerRadius="10" BackgroundColor="{StaticResource PopUpInternalBackground}" VerticalOptions="Center" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="How to Play" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center"/>
                     <Label Text="• Guess the word in 6 tries." FontSize="16" Margin="0,5"/>
@@ -70,19 +73,19 @@
 
                         <!-- Correct spot example -->
                         <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="Green" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpCorrect}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="W" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="O" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="R" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="D" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="Y" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
                         </StackLayout>
@@ -90,19 +93,19 @@
 
                         <!-- Wrong spot example -->
                         <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="L" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="Yellow" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpNearly}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="I" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="G" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="H" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="T" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
                         </StackLayout>
@@ -110,19 +113,19 @@
 
                         <!-- Not in word example -->
                         <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="R" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="O" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="G" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="Gray" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpWrong}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="U" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="White" BorderColor="Black" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="E" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
                         </StackLayout>
@@ -130,7 +133,7 @@
                     </StackLayout>
 
                     <!-- Close custom alert -->
-                    <Button Text="Close" Clicked="OnCloseAlert" BackgroundColor="MediumSeaGreen" TextColor="White"/>
+                    <Button Text="Close" Clicked="OnCloseAlert" BackgroundColor="{StaticResource PopUpButton}" TextColor="White"/>
                     
                 </StackLayout>
             </Frame>
