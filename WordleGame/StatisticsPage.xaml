@@ -57,7 +57,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame MaximumWidthRequest="300" Padding="10" Margin="5" CornerRadius="10" BorderColor="{StaticResource Gray500}">
+                            <Frame MaximumWidthRequest="300" Padding="10" Margin="5" CornerRadius="10" BorderColor="{StaticResource Gray500}" BackgroundColor="{Binding BackgroundColor}">
                                 <VerticalStackLayout Spacing="5">
                                     <Label Text="{Binding Word}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
                                     <Label Text="{Binding Attempts, StringFormat='Attempts: {0}'}" FontSize="16" TextColor="{StaticResource Primary}"/>

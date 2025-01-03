@@ -45,8 +45,8 @@ public class GameSaveDataViewModel
 		// To reduce overlapping code we could create a helper method that both access
         LoadData(username);
 
-		// Sort data in ascending order
-        var userGames = SavedDataList.OrderBy(game => game.Timestamp).ToList();
+        // Sort data in ascending order
+        var userGames = SavedDataList.Where(game => game.Finished).OrderBy(game => game.Timestamp).ToList();
 
         int currentStreak = 0;
         int maxStreak = 0;
@@ -65,9 +65,9 @@ public class GameSaveDataViewModel
                 }
             }
             else
-            {	
+            {
 				// If game was lost reset current streak
-                currentStreak = 0; ;
+				currentStreak = 0; ;
             }
         }
 
@@ -123,7 +123,7 @@ public class GameSaveDataViewModel
 		LoadData(username);
 
         // Sort data in ascending order
-        var userGames = SavedDataList.OrderBy(game => game.Timestamp).ToList();
+        var userGames = SavedDataList.Where(game => game.Finished).OrderBy(game => game.Timestamp).ToList();
 
 		int currentStreak = 0;
 		int maxStreak = 0;
@@ -146,7 +146,7 @@ public class GameSaveDataViewModel
 			{
                 // If game was lost reset current streak
                 currentStreak = 0; ;
-			}
+            }
 		}
 
 		SaveData(username);

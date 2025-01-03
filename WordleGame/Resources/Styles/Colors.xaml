@@ -23,7 +23,10 @@
 
     <Color x:Key="LabelColour">#c4c4c4</Color>
     <Color x:Key="FeedbackLabelWrong">Red</Color>
-    
+
+    <Color x:Key="GameCardComplete">#d0ffbb</Color>
+    <Color x:Key="GameCardIncomplete">#ffbbbb</Color>
+
 
     <Color x:Key="Primary">MidnightBlue</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>

@@ -296,8 +296,6 @@ namespace WordleGame
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
                 FeedbackLabel.TextColor = (Color)Application.Current.Resources["PopUpCorrect"];
 
-                // This makes sure that CheckGameOver returns true even if you guess the word in under MaxAttempts guesses
-                currentAttempt = MaxAttempts;
                 isCompleted = true;
                 EndGame();
             }
@@ -424,8 +422,9 @@ namespace WordleGame
 
         private bool CheckGameOver()
         {
-            if (currentAttempt == MaxAttempts + 1)
+            if (isCompleted)
             {
+                EndGame();
                 return true;
             }
 

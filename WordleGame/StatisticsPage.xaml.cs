@@ -47,7 +47,8 @@ public partial class StatisticsPage : ContentPage
             {
                 Word = progressItem.Word,
                 Attempts = progressItem.Attempts,
-                Timestamp = progressItem.Timestamp.ToString("g")
+                Timestamp = progressItem.Timestamp.ToString("g"),
+                BackgroundColor = progressItem.Completed ? (Color)Application.Current!.Resources["GameCardComplete"] : (Color)Application.Current!.Resources["GameCardIncomplete"]
             }).ToList();
         }
         else
@@ -82,7 +83,7 @@ public partial class StatisticsPage : ContentPage
             // Label for the guess number
             horizontalStack.Children.Add(new Label
             {
-                Text = $"{i + 1} Guess(es)",
+                Text = $"{i + 1}",
                 TextColor = (Color)Application.Current!.Resources["Primary"],
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
