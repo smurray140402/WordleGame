@@ -55,6 +55,8 @@ namespace WordleGame
                 WordGrid.WidthRequest = maxHeight;
             }
 
+            FeedbackLabel.FontSize = WordGrid.HeightRequest / 20;
+
             // Iterate through each label in the grid and adjust the font size
             foreach (var child in WordGrid.Children)
             {

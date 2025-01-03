@@ -2,23 +2,68 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.StatisticsPage"
-             Title="StatisticsPage">
+             Title="Statistics">
     
     <ScrollView>
         <VerticalStackLayout Padding="10">
-            <Label Text="Your Game Statistics" FontSize="24" HorizontalOptions="Center" Margin="0, 20"/>
-            <Label x:Name="StatisticsFeedbackLabel" Text="" FontSize="18" HorizontalOptions="Center" Margin="0, 20"/>
+            
+            <Label Text="Your Game Statistics" FontSize="32" HorizontalOptions="Center" TextColor="{StaticResource Primary}" FontAttributes="Bold"/>
+            
+            <!-- Summary Cards Grid -->
+            <Grid MaximumWidthRequest="400" ColumnDefinitions="*,*" RowDefinitions="*,*" ColumnSpacing="10" RowSpacing="10" Margin="0, 20">
+                
+                <!-- Games Played -->
+                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource Primary}" BorderColor="{StaticResource InitialText}">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Games Played" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Text}" />
+                        <Label x:Name="GamesPlayedLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="White" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Win Percentage -->
+                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource Primary}" BorderColor="{StaticResource InitialText}">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Win %" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Text}" />
+                        <Label x:Name="WinPercentageLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="{StaticResource Text}" />
+                    </VerticalStackLayout>
+                </Frame>
 
-            <!-- ListView that displays previous words, attempts and dates. Only successful tries for now.  -->
-            <ListView x:Name="StatisticsListView">
+                <!-- Current Streak -->
+                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource Primary}" BorderColor="{StaticResource InitialText}">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Current Streak" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Text}" />
+                        <Label x:Name="CurrentStreakLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="{StaticResource Text}" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Highest Streak -->
+                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource Primary}" BorderColor="{StaticResource InitialText}">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Max Streak" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Text}" />
+                        <Label x:Name="MaxStreakLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="{StaticResource Text}" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Guess Distribution -->
+            <Label TextColor="{StaticResource Primary}" HorizontalOptions="Center" Text="Guess Distribution" FontSize="20" FontAttributes="Bold" Margin="0, 10"/>
+            <StackLayout HorizontalOptions="Center" x:Name="GuessDistributionStack" Spacing="5">
+                <!-- Progress bars will be added here dynamically at runtime-->
+            </StackLayout>
+
+            <!-- ListView that displays previous words, attempts and dates. -->
+            <Label Text="Completed Games" TextColor="{StaticResource Primary}" HorizontalOptions="Center" FontSize="20" FontAttributes="Bold" Margin="0, 30, 0, 10"/>
+            <ListView HorizontalOptions="Center" x:Name="CompletedGamesListView">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Padding="10">
-                                <Label Text="{Binding Word, StringFormat='Word: {0}'}" FontSize="18"/>
-                                <Label Text="{Binding Attempts, StringFormat='Attempts: {0}'}" FontSize="16"/>
-                                <Label Text="{Binding Date, StringFormat='Date: {0}'}" FontSize="14" TextColor="Gray"/>
-                            </StackLayout>
+                            <Frame MaximumWidthRequest="300" Padding="10" Margin="5" CornerRadius="10" BorderColor="{StaticResource Gray500}">
+                                <VerticalStackLayout Spacing="5">
+                                    <Label Text="{Binding Word}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                                    <Label Text="{Binding Attempts, StringFormat='Attempts: {0}'}" FontSize="16" TextColor="{StaticResource Primary}"/>
+                                    <Label Text="{Binding Timestamp, StringFormat='Date: {0}'}" FontSize="14" TextColor="{StaticResource PrimaryDarkText}"/>
+                                </VerticalStackLayout>
+                            </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
