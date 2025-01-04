@@ -266,7 +266,7 @@ namespace WordleGame
                 {
                     label.Text = string.Empty;
                     label.BackgroundColor = (Color)Application.Current!.Resources["LabelColour"];
-                    label.TextColor = (Color)Application.Current.Resources["InitialText"];
+                    label.TextColor = (Color)Application.Current.Resources["TextSecondary"];
                 }
             }
         }
@@ -288,13 +288,13 @@ namespace WordleGame
                 label.Text = guess[col].ToString();
                 label.BackgroundColor = backgroundColours[col];
 
-                label.TextColor = (Color)Application.Current.Resources["Text"];
+                label.TextColor = (Color)Application.Current.Resources["TextPrimary"];
             }
 
             if (guess == targetWord)
             {
                 FeedbackLabel.Text = "Congratulations! You guessed the word.";
-                FeedbackLabel.TextColor = (Color)Application.Current.Resources["PopUpCorrect"];
+                FeedbackLabel.TextColor = (Color)Application.Current.Resources["FeedbackLabelRight"];
 
                 isCompleted = true;
                 EndGame();
@@ -319,7 +319,7 @@ namespace WordleGame
                     var label = (Label)WordGrid.Children[rowIndex * WordLength + col];
                     label.Text = guessText[col].ToString();
                     label.BackgroundColor = backgroundColours[col];
-                    label.TextColor = (Color)Application.Current!.Resources["Text"];
+                    label.TextColor = (Color)Application.Current!.Resources["TextPrimary"];
                 }
             }
             StartGameBtn.IsVisible = false;
@@ -332,7 +332,7 @@ namespace WordleGame
             return new Label
             {
                 Text = "",
-                TextColor = (Color)Application.Current!.Resources["InitialText"],
+                TextColor = (Color)Application.Current!.Resources["TextSecondary"],
                 FontAttributes = FontAttributes.Bold,
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalTextAlignment = TextAlignment.Center,
@@ -535,7 +535,7 @@ namespace WordleGame
                 if (guess[col] == targetWord[col])
                 {
                     letterCount[guess[col]]--;
-                    backgroundColours[col] = (Color)Application.Current!.Resources["PopUpCorrect"];
+                    backgroundColours[col] = (Color)Application.Current!.Resources["CorrectLetter"];
                 }
             }
 
@@ -546,14 +546,14 @@ namespace WordleGame
                 // Letter in word but not that position
                 if (guess[col] != targetWord[col] && letterCount.ContainsKey(guess[col]) && letterCount[guess[col]] > 0)
                 {
-                    backgroundColours[col] = (Color)Application.Current!.Resources["PopUpNearly"];
+                    backgroundColours[col] = (Color)Application.Current!.Resources["WrongPlaceLetter"];
                     letterCount[guess[col]]--;
                 }
 
                 // Letter not in word
-                else if (backgroundColours[col] != (Color)Application.Current!.Resources["PopUpCorrect"])
+                else if (backgroundColours[col] != (Color)Application.Current!.Resources["CorrectLetter"])
                 {
-                    backgroundColours[col] = (Color)Application.Current.Resources["PopUpWrong"];
+                    backgroundColours[col] = (Color)Application.Current.Resources["WrongLetter"];
                 }
             }
 

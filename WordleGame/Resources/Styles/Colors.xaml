@@ -6,27 +6,32 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="BackgroundColour">#F5F5F5</Color>
-    <Color x:Key="Text">White</Color>
-    <Color x:Key="InitialText">Black</Color>
-    
+    <!-- General Colours -->
+    <Color x:Key="BackgroundPrimary">#F5F5F5</Color>
+    <Color x:Key="TextPrimary">White</Color>
+    <Color x:Key="TextSecondary">Black</Color>
+    <Color x:Key="TextTertiary">MidnightBlue</Color>
+
+    <!-- Letter Position Colours -->
+    <Color x:Key="CorrectLetter">#21a015</Color>
+    <Color x:Key="WrongPlaceLetter">#d8c41d</Color>
+    <Color x:Key="WrongLetter">#847a7a</Color>
+
     <!-- Pop Up Colours -->
     <Color x:Key="PopUpExternalBackground">#80003366</Color>
-    <Color x:Key="PopUpInternalBackground">#F5F5F5</Color>
     <Color x:Key="PopUpText">Black</Color>
-    <Color x:Key="PopUpCorrect">#21a015</Color>
-    <Color x:Key="PopUpNearly">#d8c41d</Color>
-    <Color x:Key="PopUpWrong">#847a7a</Color>
     <Color x:Key="PopUpEmpty">White</Color>
     <Color x:Key="PopUpButton">MediumSeaGreen</Color>
     <Color x:Key="PopUpBorder">Black</Color>
 
+    <!-- FeedbackLabel Colours -->
     <Color x:Key="LabelColour">#c4c4c4</Color>
     <Color x:Key="FeedbackLabelWrong">Red</Color>
+    <Color x:Key="FeedbackLabelRight">Green</Color>
 
+    <!-- Game Card Colours -->
     <Color x:Key="GameCardComplete">#d0ffbb</Color>
     <Color x:Key="GameCardIncomplete">#ffbbbb</Color>
-
 
     <Color x:Key="Primary">MidnightBlue</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>

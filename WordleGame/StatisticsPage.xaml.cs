@@ -84,7 +84,7 @@ public partial class StatisticsPage : ContentPage
             horizontalStack.Children.Add(new Label
             {
                 Text = $"{i + 1}",
-                TextColor = (Color)Application.Current!.Resources["Primary"],
+                TextColor = (Color)Application.Current!.Resources["TextTertiary"],
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
                 VerticalOptions = LayoutOptions.Center
@@ -103,7 +103,7 @@ public partial class StatisticsPage : ContentPage
             horizontalStack.Children.Add(new Label
             {
                 Text = $"{count}",
-                TextColor = (Color)Application.Current!.Resources["Primary"],
+                TextColor = (Color)Application.Current!.Resources["TextTertiary"],
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 16,
                 VerticalOptions = LayoutOptions.Center

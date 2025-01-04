@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.MainPage"
              Title="WORDLE"
-             BackgroundColor="{StaticResource BackgroundColour}">
+             BackgroundColor="{StaticResource BackgroundPrimary}">
 
     <Grid>
 
@@ -38,12 +38,12 @@
         <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" >
 
             <!-- Label for feedback -->
-            <Label x:Name="FeedbackLabel" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource Primary}" HorizontalOptions="Center" Margin="0,10" CharacterSpacing="1.5"/>
+            <Label x:Name="FeedbackLabel" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextTertiary}" HorizontalOptions="Center" Margin="0,10" CharacterSpacing="1.5"/>
 
 
             <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"
-                    FontSize="16" CornerRadius="10" BackgroundColor="{StaticResource Primary}" 
-                    TextColor="{StaticResource Text}" WidthRequest="150" HeightRequest="50"/>
+                    FontSize="16" CornerRadius="10" BackgroundColor="{StaticResource TextTertiary}" 
+                    TextColor="{StaticResource TextPrimary}" WidthRequest="150" HeightRequest="50"/>
 
             <!-- Wordle Grid --> 
             <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5" Margin="0,20">
@@ -60,7 +60,7 @@
 
         <!-- Custom Alert -->
         <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="{StaticResource PopUpExternalBackground}" Grid.Row="1">
-            <Frame Padding="20" CornerRadius="10" BackgroundColor="{StaticResource PopUpInternalBackground}" VerticalOptions="Center" HorizontalOptions="Center">
+            <Frame Padding="20" CornerRadius="10" BackgroundColor="{StaticResource BackgroundPrimary}" VerticalOptions="Center" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="How to Play" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center"/>
                     <Label Text="• Guess the word in 6 tries." FontSize="16" Margin="0,5"/>
@@ -73,7 +73,7 @@
 
                         <!-- Correct spot example -->
                         <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpCorrect}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource CorrectLetter}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="W" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
                             <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
@@ -96,7 +96,7 @@
                             <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="L" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpNearly}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource WrongPlaceLetter}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="I" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
                             <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
@@ -122,7 +122,7 @@
                             <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="G" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
-                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpWrong}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
+                            <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource WrongLetter}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
                                 <Label Text="U" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
                             </Frame>
                             <Frame WidthRequest="35" HeightRequest="35" BackgroundColor="{StaticResource PopUpEmpty}" BorderColor="{StaticResource PopUpBorder}" CornerRadius="5" Padding="0">
@@ -133,7 +133,7 @@
                     </StackLayout>
 
                     <!-- Close custom alert -->
-                    <Button Text="Close" Clicked="OnCloseAlert" BackgroundColor="{StaticResource PopUpButton}" TextColor="White"/>
+                    <Button Text="Close" Clicked="OnCloseAlert" BackgroundColor="{StaticResource PopUpButton}" TextColor="{StaticResource TextPrimary}"/>
                     
                 </StackLayout>
             </Frame>
