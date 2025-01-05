@@ -72,9 +72,6 @@ namespace WordleGame
             {
                 if (child is Label label)
                 {
-                    label.HorizontalTextAlignment = TextAlignment.Center;
-                    label.VerticalTextAlignment = TextAlignment.Center;
-
                     label.FontSize = WordGrid.HeightRequest/10;
                 }
             }
@@ -348,8 +345,6 @@ namespace WordleGame
                 VerticalTextAlignment = TextAlignment.Center,
                 BackgroundColor = (Color)Application.Current.Resources["LabelColour"],
                 FontSize = WordGrid.HeightRequest / 10,
-                MinimumWidthRequest = 40,
-                MinimumHeightRequest = 40,
                 Margin = 2
             };
         } // CreateCellLabel
