@@ -86,6 +86,8 @@ public partial class StatisticsPage : ContentPage
                 Text = $"{i + 1}",
                 TextColor = (Color)Application.Current!.Resources["TextTertiary"],
                 FontAttributes = FontAttributes.Bold,
+                BackgroundColor = (Color)Application.Current!.Resources["BackgroundPrimary"],
+                Padding = 10,
                 FontSize = 16,
                 VerticalOptions = LayoutOptions.Center
             });
@@ -105,6 +107,8 @@ public partial class StatisticsPage : ContentPage
                 Text = $"{count}",
                 TextColor = (Color)Application.Current!.Resources["TextTertiary"],
                 FontAttributes = FontAttributes.Bold,
+                BackgroundColor = (Color)Application.Current!.Resources["BackgroundPrimary"],
+                Padding = 10,
                 FontSize = 16,
                 VerticalOptions = LayoutOptions.Center
             });

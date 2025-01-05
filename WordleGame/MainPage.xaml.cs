@@ -36,6 +36,16 @@ namespace WordleGame
             wordModel = new WordViewModel();
             gameSaveDataViewModel = new GameSaveDataViewModel();
             this.LayoutChanged += OnWindowChange;
+
+            SetMode();
+        }
+
+        private void SetMode()
+        {
+            bool isDarkMode = Preferences.Default.Get("isDarkMode", false);
+
+            // Set the application theme based on the saved preference
+            Application.Current.UserAppTheme = isDarkMode ? AppTheme.Dark : AppTheme.Light;
         }
 
         private void OnWindowChange(object sender, EventArgs e)

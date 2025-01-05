@@ -2,18 +2,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.StatisticsPage"
-             Title="Statistics">
+             Title="Statistics"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundPrimary}, Dark={StaticResource Gray900}}">
     
     <ScrollView>
         <VerticalStackLayout Padding="10">
-            
-            <Label Text="Your Game Statistics" FontSize="32" HorizontalOptions="Center" TextColor="{StaticResource TextTertiary}" FontAttributes="Bold"/>
+
+            <Label Text="Your Game Statistics" FontSize="32" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource TextPrimary}}" FontAttributes="Bold"/>
             
             <!-- Summary Cards Grid -->
             <Grid MaximumWidthRequest="400" ColumnDefinitions="*,*" RowDefinitions="*,*" ColumnSpacing="10" RowSpacing="10" Margin="0, 20">
                 
                 <!-- Games Played -->
-                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource TextTertiary}" BorderColor="{StaticResource TextSecondary}">
+                <Frame Grid.Row="0" Grid.Column="0" CornerRadius="10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource PrimaryDark}}" BorderColor="{StaticResource TextSecondary}">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Games Played" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         <Label x:Name="GamesPlayedLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="White" />
@@ -21,7 +22,7 @@
                 </Frame>
                 
                 <!-- Win Percentage -->
-                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource TextTertiary}" BorderColor="{StaticResource InitialText}">
+                <Frame Grid.Row="0" Grid.Column="1" CornerRadius="10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource PrimaryDark}}" BorderColor="{StaticResource TextSecondary}">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Win %" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         <Label x:Name="WinPercentageLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="{StaticResource TextPrimary}" />
@@ -29,7 +30,7 @@
                 </Frame>
 
                 <!-- Current Streak -->
-                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource TextTertiary}" BorderColor="{StaticResource TextSecondary}">
+                <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource PrimaryDark}}" BorderColor="{StaticResource TextSecondary}">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Current Streak" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         <Label x:Name="CurrentStreakLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="{StaticResource TextPrimary}" />
@@ -37,7 +38,7 @@
                 </Frame>
                 
                 <!-- Highest Streak -->
-                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="15" BackgroundColor="{StaticResource TextTertiary}" BorderColor="{StaticResource TextSecondary}">
+                <Frame Grid.Row="1" Grid.Column="1" CornerRadius="10" Padding="15" BackgroundColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource PrimaryDark}}" BorderColor="{StaticResource TextSecondary}">
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Max Streak" HorizontalTextAlignment="Center" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
                         <Label x:Name="MaxStreakLabel" HorizontalTextAlignment="Center" FontSize="24" TextColor="{StaticResource TextPrimary}" />
@@ -46,13 +47,13 @@
             </Grid>
 
             <!-- Guess Distribution -->
-            <Label TextColor="{StaticResource TextTertiary}" HorizontalOptions="Center" Text="Guess Distribution" FontSize="20" FontAttributes="Bold" Margin="0, 10"/>
+            <Label TextColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource White}}" HorizontalOptions="Center" Text="Guess Distribution" FontSize="20" FontAttributes="Bold" Margin="0, 10"/>
             <StackLayout HorizontalOptions="Center" x:Name="GuessDistributionStack" Spacing="5">
                 <!-- Progress bars will be added here dynamically at runtime-->
             </StackLayout>
 
             <!-- ListView that displays previous words, attempts and dates. -->
-            <Label Text="Completed Games" TextColor="{StaticResource TextTertiary}" HorizontalOptions="Center" FontSize="20" FontAttributes="Bold" Margin="0, 30, 0, 10"/>
+            <Label Text="Completed Games" TextColor="{AppThemeBinding Light={StaticResource TextTertiary}, Dark={StaticResource White}}" HorizontalOptions="Center" FontSize="20" FontAttributes="Bold" Margin="0, 30, 0, 10"/>
             <ListView HorizontalOptions="Center" x:Name="CompletedGamesListView">
                 <ListView.ItemTemplate>
                     <DataTemplate>

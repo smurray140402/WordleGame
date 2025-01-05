@@ -2,20 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.SettingsPage"
-             Title="SettingsPage">
+             Title="SettingsPage"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundPrimary}, Dark={StaticResource Gray900}}">
     
     <VerticalStackLayout Padding="20">
-        
-        <Label  Text="Welcome to the settings Page."
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
         
         <!-- Delete Game Save Data -->
         <Button Text="Reset Save Game Data"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
-                Clicked="OnResetDataClicked" />
-        
+                Clicked="OnResetDataClicked" 
+                Margin="0, 10"/>
+
+        <Button x:Name="DarkModeToggleButton" 
+                Text="Enable Dark Mode" 
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Clicked="DarkModeToggle" />
+
     </VerticalStackLayout>
     
 </ContentPage>

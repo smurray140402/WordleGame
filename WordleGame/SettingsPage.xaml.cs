@@ -18,7 +18,31 @@ public partial class SettingsPage : ContentPage
 		InitializeComponent();
 		currentUsername = username;
 		gameSaveDataViewModel = viewModel;
-	}
+
+        // Initialize the toggle state based on the saved preference
+        bool isDarkMode = Preferences.Default.Get("isDarkMode", false);
+		DarkModeToggleButton.Text = isDarkMode ? "Disable Dark Mode" : "Enable Dark Mode";
+    }
+
+    private void DarkModeToggle(object sender, EventArgs e) {
+
+		bool isDarkMode = Preferences.Default.Get("isDarkMode", false);
+
+		if (isDarkMode) 
+		{ 
+			Application.Current.UserAppTheme = AppTheme.Light; 
+			Preferences.Default.Set("isDarkMode", false);
+			DarkModeToggleButton.Text = "Enable Dark Mode";
+		} 
+		else 
+		{ 
+			Application.Current.UserAppTheme = AppTheme.Dark; 
+			Preferences.Default.Set("isDarkMode", true);
+            DarkModeToggleButton.Text = "Disable Dark Mode";
+
+        }
+    } 
+	
 
 	// Resets game data for user
 	private async void OnResetDataClicked(object sender, EventArgs e)

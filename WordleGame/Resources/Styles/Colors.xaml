@@ -19,6 +19,7 @@
 
     <!-- Pop Up Colours -->
     <Color x:Key="PopUpExternalBackground">#80003366</Color>
+    <Color x:Key="PopUpExternalBackgroundDark">#f0212121</Color>
     <Color x:Key="PopUpText">Black</Color>
     <Color x:Key="PopUpEmpty">White</Color>
     <Color x:Key="PopUpButton">MediumSeaGreen</Color>

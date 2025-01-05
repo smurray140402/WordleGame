@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordleGame.MainPage"
              Title="WORDLE"
-             BackgroundColor="{StaticResource BackgroundPrimary}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundPrimary}, Dark={StaticResource Gray900}}">
 
     <Grid>
 
         <!-- Row 0 is for the icons and Row 1 is for the game grid and any buttons or labels-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <BoxView Grid.Row="0" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundPrimary}, Dark={StaticResource Gray300}}" InputTransparent="True" />
 
         <StackLayout x:Name="Icons" Grid.Row="0" Orientation="Horizontal" HorizontalOptions="End" Spacing="20" Padding="10" Margin="20, 0" >
 
@@ -38,29 +40,36 @@
         <VerticalStackLayout Grid.Row="1" HorizontalOptions="Center" >
 
             <!-- Label for feedback -->
-            <Label x:Name="FeedbackLabel" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextTertiary}" HorizontalOptions="Center" Margin="0,10" CharacterSpacing="1.5"/>
+            <Label x:Name="FeedbackLabel" FontSize="16" FontAttributes="Bold" 
+                   BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundPrimary}, Dark={StaticResource BackgroundPrimary}}" 
+                   TextColor="{StaticResource TextTertiary}" 
+                   HorizontalOptions="Center" Padding="10" Margin="0,10, 0, 15" CharacterSpacing="1.5"/>
 
 
             <Button x:Name="StartGameBtn" Text="Start New Game" Clicked="OnNewGameClicked"
                     FontSize="16" CornerRadius="10" BackgroundColor="{StaticResource TextTertiary}" 
-                    TextColor="{StaticResource TextPrimary}" WidthRequest="150" HeightRequest="50"/>
+                    TextColor="{StaticResource TextPrimary}" WidthRequest="170" HeightRequest="50" BorderColor="White" BorderWidth="2"
+                    FontAttributes="Bold"/>
 
             <!-- Wordle Grid --> 
             <Grid x:Name="WordGrid" HorizontalOptions="Center" RowSpacing="5" ColumnSpacing="5" Margin="0,20">
                 <!-- Content added here dynamically -->
             </Grid>
+            
 
             <!-- Input -->
             <HorizontalStackLayout Margin="0,20">
                 <Entry x:Name="UserInput" Placeholder="Guess the word!" Opacity="0" MaxLength="5" Keyboard="Text" Completed="OnGuessBtnClicked" TextChanged="OnUserInputTextChanged" Unfocused="UserInput_Unfocused"/>
                 <!-- <Button x:Name="GuessBtn" Text="Guess!" Clicked="OnGuessBtnClicked"/> -->
             </HorizontalStackLayout>
+            
+            
 
         </VerticalStackLayout>
 
         <!-- Custom Alert -->
-        <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="{StaticResource PopUpExternalBackground}" Grid.Row="1">
-            <Frame Padding="20" CornerRadius="10" BackgroundColor="{StaticResource BackgroundPrimary}" VerticalOptions="Center" HorizontalOptions="Center">
+        <ContentView x:Name="CustomAlert" IsVisible="False" BackgroundColor="{AppThemeBinding Light={StaticResource PopUpExternalBackground}, Dark={StaticResource PopUpExternalBackgroundDark}}" Grid.Row="1">
+            <Frame Padding="20" CornerRadius="10" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundPrimary}, Dark={StaticResource PrimaryDark}}" VerticalOptions="Center" HorizontalOptions="Center">
                 <StackLayout>
                     <Label Text="How to Play" FontAttributes="Bold" FontSize="25" HorizontalOptions="Center"/>
                     <Label Text="• Guess the word in 6 tries." FontSize="16" Margin="0,5"/>
